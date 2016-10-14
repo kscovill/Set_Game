@@ -11,7 +11,12 @@ public class Card {
 	    protected JFrame cardJFrame;
 	    protected JLabel cardJLabel; // the container for the Image (of a bug)
 	    
-	    protected String cardImageName[] = new String[14];
+	    protected String fatColorName[] = new String[3];
+	    protected String mediumColorName[] = new String[3];
+	    protected String skinnyColorName[] = new String[3];
+	    protected String ornamentName[] = new String[3];
+	    protected String topperName[] = new String[3];
+	    protected ImageIcon cardImage[] = new ImageIcon[81];
 	    
 	    protected int horizontalMovement;
 	    protected int verticalMovement;
@@ -63,6 +68,23 @@ public class Card {
 	        cardJLabel.setVisible(false);
 	        cardJLabel.setVisible(true);
 
+	        fatColorName[0] = "fatBlue.png";
+	        fatColorName[1] = "fatRed.png";
+	        fatColorName[2] = "fatNormal.png";
+	        mediumColorName[0] = "mediumBlue.png";
+	        mediumColorName[1] = "mediumRed.png";
+	        mediumColorName[2] = "mediumNormal.png";
+	        skinnyColorName[0] = "skinnyBlue.png";
+	        skinnyColorName[1] = "skinnyRed.png";
+	        skinnyColorName[2] = "skinnyNormal.png";
+	        ornamentName[0] = "ornamentBlue.png";
+	        ornamentName[1] = "ornamentRed.png";
+	        ornamentName[2] = "noOrnament.png";
+	        topperName[0] = "star.png";
+	        topperName[1] = "angel.png";
+	        topperName[2] = "nutcracker.png";
+
+	        
 	        horizontalMovement = 0;
 	        verticalMovement = 0;
 	        cardDirection = UP;
