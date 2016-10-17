@@ -8,30 +8,32 @@ public class Card {
 	    public final static int LEFT = 2;
 	    public final static int RIGHT = 3;
 	    public final static int NUMBER_OF_DIRECTIONS = 4;
+	    public final static int DECK_SIZE = 81;
 	    protected JFrame cardJFrame;
-	    protected JLabel cardJLabel; // the container for the Image (of a bug)
+	    protected JLabel cardJLabel[][] = new JLabel[DECK_SIZE][3]; // the container for the Image (of a bug)
+	    
 	    
 	    protected String fatColorName[] = new String[3];
 	    protected String mediumColorName[] = new String[3];
 	    protected String skinnyColorName[] = new String[3];
 	    protected String ornamentName[] = new String[3];
 	    protected String topperName[] = new String[3];
-	    protected ImageIcon cardImage[] = new ImageIcon[81];
+	    protected ImageIcon cardImage[][] = new ImageIcon[81][4];
 	    
 	    protected int horizontalMovement;
 	    protected int verticalMovement;
 	    protected int directionChangeProbability;
-	    protected int cardDirection=UP;
 	    protected int xPosition=0;  // top left corner of Image
 	    protected int yPosition=0;  // top left corner of Image
 	    protected int hit = 0;
 	    
+	    protected void Shuffle(){
+	    	
+	    }
 	    protected void drawCard(){ 
-	    	/////////////////
-	    	/////////////////
-	    	// How are we going to handle this?
-	    	////////////////
-	    	////////////////
+	    	JLabel label = new JLabel();
+	    	ImageIcon icon = new ImageIcon("fatRed.png");
+	    	label.setIcon(icon);
 	    }
 
 	    protected void eraseCard(){
@@ -39,7 +41,7 @@ public class Card {
 	    }   
 	    
 	    protected boolean atRightEdge(){
-	        return (xPosition+cardJLabel.getWidth()+horizontalMovement > cardJFrame.getContentPane().getWidth());
+	        return (xPosition+cardJLabel[0][0].getWidth()+horizontalMovement > cardJFrame.getContentPane().getWidth());
 	    }
 	    
 	    protected boolean atLeftEdge(){
@@ -51,7 +53,7 @@ public class Card {
 	    }
 	    
 	    protected boolean atBottomEdge(){
-	        return (yPosition+cardJLabel.getHeight()+verticalMovement > cardJFrame.getContentPane().getHeight());
+	        return (yPosition+cardJLabel[0][0].getHeight()+verticalMovement > cardJFrame.getContentPane().getHeight());
 	    }
 	    
 	    //---------------------------------
@@ -62,12 +64,9 @@ public class Card {
 	        cardJFrame = passedInJFrame;
 	        directionChangeProbability = passedInDirectionChangeProbability;
 
-	        cardJLabel = new JLabel();
-	        cardJLabel.setBounds (10, 10, 10, 10); // arbitrary, will change later
-	        cardJFrame.getContentPane().add(cardJLabel);
-	        cardJLabel.setVisible(false);
-	        cardJLabel.setVisible(true);
-
+	        
+	       
+	       
 	        fatColorName[0] = "fatBlue.png";
 	        fatColorName[1] = "fatRed.png";
 	        fatColorName[2] = "fatNormal.png";
@@ -83,20 +82,68 @@ public class Card {
 	        topperName[0] = "star.png";
 	        topperName[1] = "angel.png";
 	        topperName[2] = "nutcracker.png";
-
 	        
+	        
+	        int count = 0;
+	        for(int i =0;i<3;i++){
+	        	for(int j = 0; j<3; j++){
+	        		for (int k = 0; k<3; k++){
+	        			for(int m=0; m<3;m++){
+	        				switch(i){
+	        				case 0:
+	        					cardImage[count][0] = new ImageIcon(fatColorName[j]);
+	        					break;
+	        				case 1:
+	        					cardImage[count][0] = new ImageIcon(skinnyColorName[j]);
+	        					break;
+	        				case 2:
+	        					cardImage[count][0] = new ImageIcon(mediumColorName[j]);
+	        					break;
+	        				}
+	        				cardImage[count][1] = new ImageIcon(ornamentName[k]);
+	        				cardImage[count][2] = new ImageIcon(topperName[m]);
+	        				
+	        				count++;
+	        				
+	        						
+	        				
+	        			}
+	        		}	
+	        	}
+	        }
+	        
+	        
+	        
+	        for (int i = 0; i<81;i++){
+		    	   for(int j = 0; j<3; j++){
+		    		cardJLabel[i][j] = new JLabel();
+		    		cardJLabel[i][j].setIcon(new ImageIcon("fatNormal.png"));
+			        cardJLabel[i][j].setBounds (10, 10, 10, 10); // arbitrary, will change later
+			        cardJFrame.getContentPane().add(cardJLabel[i][j]);
+			        cardJLabel[i][j].setVisible(false);
+			        cardJLabel[i][j].setVisible(true);
+			        
+		    	   }
+		       }	
+	        for (int i = 0; i<81; i++){
+	        
+	        	cardJLabel[i][0].setIcon(cardImage[i][0]);
+				cardJLabel[i][1].setIcon(cardImage[i][1]);
+				cardJLabel[i][2].setIcon(cardImage[i][2]);
+				System.out.println(i + " " +cardJLabel[i][0]);
+	        }
 	        horizontalMovement = 0;
 	        verticalMovement = 0;
-	        cardDirection = UP;
 	        xPosition = 50*passedInCardNumber; // arbitrary starting point
 	        yPosition = 20; // arbitrary starting point        
 	    }
 	   
+	    
 	    public boolean isCardHit(int xMousePosition, int yMousePosition){
 	        if ((xPosition <= xMousePosition 
-	            && xMousePosition <= xPosition + cardImage[cardDirection].getIconWidth())
+	            && xMousePosition <= xPosition + cardImage[0][0].getIconWidth())
 	            && (yPosition <= yMousePosition 
-	            && yMousePosition <= yPosition + cardImage[cardDirection].getIconHeight())){
+	            && yMousePosition <= yPosition + cardImage[0][0].getIconHeight())){
 	                return true;
 	        }
 	        else {
