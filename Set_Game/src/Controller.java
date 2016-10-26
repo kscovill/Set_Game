@@ -3,6 +3,7 @@ import java.awt.Container;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.TimerTask;
@@ -74,12 +75,12 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
         label[0] = new JLabel();
         label[0].setIcon(new ImageIcon(name[0]));
         
-        JButton button[] = new JButton[4];
+        JButton button[] = new JButton[12];
         ImageIcon icon[] = new ImageIcon[3];
         
         
         
-       for (int j = 0; j < 4; j++){
+       for (int j = 0; j < 12; j++){
     	   button[j] = new JButton();
 	       for(int i = 0; i < 3; i++){
 		        label[i] = new JLabel();
@@ -93,25 +94,28 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		        button[j].setBackground(Color.GRAY);
 		        label[i].setBounds(-10, 25, icon[0].getIconWidth(), icon[0].getIconHeight());
 		        gameJFrame.setVisible(true);
-		        button[j].setBounds(50 + (j*200), 50, icon[0].getIconWidth()-20, icon[0].getIconHeight()+50);
-		        button[j].addActionListener(new ActionListener(){
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						
-						button[0].setBorder(BorderFactory.createLineBorder(Color.YELLOW, 5));
-					}
-		        	
+		        System.out.println(50+((int)(j/4)*400));
+		        
+		        button[j].setBounds(400 + ((j%4)*200), 50+((int)(j/4)*300), icon[0].getIconWidth()-20, icon[0].getIconHeight()+50);
+		        button[j].addMouseListener(new MouseAdapter() {
+		        	  public void mousePressed(MouseEvent e) {
+		        		  button[0].setBorder(BorderFactory.createLineBorder(Color.YELLOW, 5));
+		        	  }
+	        		  public void mouseReleased(MouseEvent e) {
+		        		  button[0].setBorder(null);
+	        		  }
 		        });
-	       }
+		        
+		        
+	       }	
 	       gameJFrame.getContentPane().add(button[j]);
        }
         
         gameJFrame.setVisible(true);
+        gameJFrame.getContentPane().repaint();
 	}
 	public static void main( String args[]){
-        Controller myController = new Controller("Advanced Set", 50,50, 1000, 800);// window title, int gameWindowX, int gameWindowY, int gameWindowWidth, int gameWindowHeight){
+        Controller myController = new Controller("Advanced Set", 50,50, 1200, 1200);// window title, int gameWindowX, int gameWindowY, int gameWindowWidth, int gameWindowHeight){
         
 	}
 	@Override
