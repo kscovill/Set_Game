@@ -25,6 +25,8 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
     public Container gameContentPane;
     private int xMouseOffsetToContentPaneFromJFrame = 0;
     private int yMouseOffsetToContentPaneFromJFrame = 0;
+    private java.util.Timer gameTimer = new java.util.Timer();
+    private int highCount = 0;
     
     protected String fatColorName[] = new String[3];
     protected String mediumColorName[] = new String[3];
@@ -49,70 +51,20 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
         xMouseOffsetToContentPaneFromJFrame = borderWidth;
         yMouseOffsetToContentPaneFromJFrame = gameWindowHeight - gameContentPane.getHeight()-borderWidth; // assume side border = bottom border; ignore title bar
         
-        JLabel label[] = new JLabel[3];
-        String name[] = new String[3];
-        name[0] = "yellowOrnaments.png";
-        name[1] = "angel.png";
-        name[2] = "mediumNormal.png";
+        gameDeck = new Deck(gameJFrame);
         
-        fatColorName[0] = "fatBlue.png";
-        fatColorName[1] = "fatRed.png";
-        fatColorName[2] = "fatNormal.png";
-        mediumColorName[0] = "mediumBlue.png";
-        mediumColorName[1] = "mediumRed.png";
-        mediumColorName[2] = "mediumNormal.png";
-        skinnyColorName[0] = "skinnyBlue.png";
-        skinnyColorName[1] = "skinnyRed.png";
-        skinnyColorName[2] = "skinnyNormal.png";
-        ornamentName[0] = "ornamentBlue.png";
-        ornamentName[1] = "ornamentRed.png";
-        ornamentName[2] = "noOrnament.png";
-        topperName[0] = "star.png";
-        topperName[1] = "angel.png";
-        topperName[2] = "nutcracker.png";
-        
-        
-        label[0] = new JLabel();
-        label[0].setIcon(new ImageIcon(name[0]));
-        
-        JButton button[] = new JButton[12];
-        ImageIcon icon[] = new ImageIcon[3];
-        
-        
-        
-       for (int j = 0; j < 12; j++){
-    	   button[j] = new JButton();
-	       for(int i = 0; i < 3; i++){
-		        label[i] = new JLabel();
-		        icon[i] = new ImageIcon(name[i]);
-		        Image image = icon[i].getImage(); // transform it 
-		        Image newimg = image.getScaledInstance((int)(374/2), (int)(422/2),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-		        icon[i] = new ImageIcon(newimg);  // transform it back
-		        label[i].setIcon(icon[i]);
-		        button[j].add(label[i]);
-		        button[j].setLayout(null);
-		        button[j].setBackground(Color.GRAY);
-		        label[i].setBounds(-10, 25, icon[0].getIconWidth(), icon[0].getIconHeight());
-		        gameJFrame.setVisible(true);
-		        System.out.println(50+((int)(j/4)*400));
-		        
-		        button[j].setBounds(400 + ((j%4)*200), 50+((int)(j/4)*300), icon[0].getIconWidth()-20, icon[0].getIconHeight()+50);
-		        button[j].addMouseListener(new MouseAdapter() {
-		        	  public void mousePressed(MouseEvent e) {
-		        		  button[0].setBorder(BorderFactory.createLineBorder(Color.YELLOW, 5));
-		        	  }
-	        		  public void mouseReleased(MouseEvent e) {
-		        		  button[0].setBorder(null);
-	        		  }
-		        });
-		        
-		        
-	       }	
-	       gameJFrame.getContentPane().add(button[j]);
-       }
-        
+        gameTimer.schedule(this, 0, 10);
         gameJFrame.setVisible(true);
         gameJFrame.getContentPane().repaint();
+        
+        Card[] card = new Card[81];
+        for (int i =0; i < 81;i++){
+        	card[i] = gameDeck.list.get(i);
+        }
+        for ( int i =0; i < 12; i++){
+        	card[i].button.setBounds(400 + ((int)(i%4)*200), 50 + ((int)(i/4)*300), card[i].getWidth()-20, card[i].getHeight()+50);
+        	card[i].button.setVisible(true);
+        }
 	}
 	public static void main( String args[]){
         Controller myController = new Controller("Advanced Set", 50,50, 1200, 1200);// window title, int gameWindowX, int gameWindowY, int gameWindowWidth, int gameWindowHeight){
@@ -145,9 +97,9 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 	}
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		
 	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub

@@ -1,33 +1,50 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-public class Deck {
+public class Deck{
 	    protected JFrame cardJFrame;
 	    protected JLabel cardJLabel[][] = new JLabel[81][3]; // the container for the Image (of a bug)
 	    protected Card card[] = new Card[81];
+	    protected ArrayList<Card> list;
 	    
 	    protected void Shuffle(){
 	    	
 	    }
 	    protected void makeDeck(){
-	    	ArrayList list = new ArrayList();
-	    	for (int i =0; i < 81; i++){
-	    		card[i] = new Card(cardJFrame,0,i);
-	    		list.add(card[i]);
-	    	}
-	    	Collections.shuffle(list);
-	    	System.out.println(list);
+	    	list = new ArrayList();
+	    	int count = 0;
+	    	for(int i =0;i<3;i++){
+	        	for(int j = 0; j<3; j++){
+	        		for (int k = 0; k<3; k++){
+	        			for(int m=0; m<3;m++){
+	        				
+	        				card[count] = new Card(cardJFrame,count,0,i,j,k,m);
+	        				list.add(card[i]);
+	        				count++;
+	        				System.out.println("Card with: " + i + j + k + m);
+	        				
+	        			}
+	        		}	
+	        	}
+	        }
 	    	
+	    	
+	    	Collections.shuffle(list);
+	    
+	    	System.out.println(list);
 	    }
+	    
 	    public Deck(JFrame passedInJFrame){
 	        cardJFrame = passedInJFrame;
-	        
-	        
 	        makeDeck();
+	      /*for (int i =0; i <12;i++){  
+	        card[i] = new Card(cardJFrame,i,0,(int)(i%3),1,1,1);
+	      }*/
 	        /*
 	       fatColorName[0] = "fatBlue.png";
 	        fatColorName[1] = "fatRed.png";
