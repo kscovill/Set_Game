@@ -1,13 +1,16 @@
 import java.util.ArrayList;
+import java.awt.*;
 import java.util.Collections;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class Deck{
 	    protected JFrame cardJFrame;
+	    protected JPanel panel;
 	    protected JLabel cardJLabel[][] = new JLabel[81][3]; // the container for the Image (of a bug)
 	    protected Card card[] = new Card[81];
 	    protected ArrayList<Card> list;
@@ -23,24 +26,25 @@ public class Deck{
 	        		for (int k = 0; k<3; k++){
 	        			for(int m=0; m<3;m++){
 	        				
-	        				card[count] = new Card(cardJFrame,count,0,i,j,k,m);
-	        				list.add(card[i]);
+	        				card[count] = new Card(cardJFrame,panel,count,0,i,j,k,m);
+	        				list.add(card[count]);
 	        				count++;
-	        				System.out.println("Card with: " + i + j + k + m);
+	        				//System.out.println("Card with: " + i + j + k + m + "count: " + count);
 	        				
 	        			}
 	        		}	
 	        	}
 	        }
 	    	
-	    	
-	    	Collections.shuffle(list);
-	    
-	    	System.out.println(list);
+	    	for (int i =0;i<10;i++){
+	    		Collections.shuffle(list);
+	    	}
+	    	//System.out.println(list);
 	    }
 	    
-	    public Deck(JFrame passedInJFrame){
+	    public Deck(JFrame passedInJFrame, JPanel panel1){
 	        cardJFrame = passedInJFrame;
+	        panel = panel1;
 	        makeDeck();
 	      /*for (int i =0; i <12;i++){  
 	        card[i] = new Card(cardJFrame,i,0,(int)(i%3),1,1,1);

@@ -1,5 +1,6 @@
 import javax.swing.JFrame; // for JFrame
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import java.awt.Color;
 import java.awt.Image;
@@ -32,6 +33,11 @@ class Card {
     protected String topperName[] = new String[3];
     protected ImageIcon icon[] = new ImageIcon[3];
     protected boolean highlight = false;
+    protected int Tree;
+    protected int Ornament;
+    protected int Topper;
+    protected int Colors;
+    
     
     protected int horizontalMovement;
     protected int verticalMovement;
@@ -41,7 +47,12 @@ class Card {
     protected int yPosition=0;  // top left corner of Image
 	boolean movement = false;
 	
-    public Card(JFrame myJFrame, int cardNumber, int directionChangeProbability, int tree, int orn, int top, int color){
+    public Card(JFrame myJFrame, JPanel panel, int cardNumber, int directionChangeProbability, int tree, int orn, int top, int color){
+    	
+    	Colors = color;
+    	Topper = top;
+    	Tree = tree;
+    	Ornament = orn;
     	
     	fatColorName[0] = "fatBlue.png";
         fatColorName[1] = "fatRed.png";
@@ -62,14 +73,18 @@ class Card {
         switch(tree){
 		case 0:
 			icon[2] = new ImageIcon(fatColorName[color]);
+			//System.out.println("FAT");
 			break;
 		case 1:
 			icon[2] = new ImageIcon(skinnyColorName[color]);
+			//System.out.println("SKINNY");
 			break;
 		case 2:
 			icon[2] = new ImageIcon(mediumColorName[color]);
+			//System.out.println("MEDIUM");
 			break;
 		}
+        
 		icon[1] = new ImageIcon(ornamentName[orn]);
 		icon[0] = new ImageIcon(topperName[top]);
 		
@@ -104,8 +119,9 @@ class Card {
  		        
  		        
  	       }	
- 	       myJFrame.getContentPane().add(button);
+ 	       panel.add(button);
  	       button.setVisible(true);
+ 	       panel.setVisible(true);
  	       myJFrame.getContentPane().repaint();
         
 	    
@@ -169,12 +185,32 @@ class Card {
     			
     }
     
-    protected void drawCard(){ 
-    	label[1].setIcon(icon[0]);
-    	label[1].setBounds(xPosition, yPosition, icon[0].getIconWidth(),icon[0].getIconHeight());  
-        label[1].setVisible(true);
+    protected void drawCard(){   
     }
-
+    protected String getTop(){
+    	return topperName[Topper];
+    }
+    protected String getOrn(){
+    	return topperName[Topper];
+    }
+    protected String getSize(){
+    switch(Tree){
+	case 0:
+		return fatColorName[Colors];
+		
+	case 1:
+		return skinnyColorName[Colors];
+		
+	case 2:
+		return mediumColorName[Colors];
+    default:
+    	return "";
+	}
+    	
+    }
+    protected int getColors(){
+    	return Colors;
+    }
     protected void eraseCard(){
     	label[0].setVisible(false);
     }   
