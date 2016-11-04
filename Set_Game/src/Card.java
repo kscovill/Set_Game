@@ -3,7 +3,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -32,6 +34,7 @@ class Card {
     protected int Topper;
     protected int Colors;
     protected int mouseCounter;
+    protected Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     
     public Card(JFrame myJFrame, JPanel panel, int cardNumber, int directionChangeProbability, int tree, int orn, int top, int color){
     	
@@ -39,6 +42,9 @@ class Card {
     	Topper = top;
     	Tree = tree;
     	Ornament = orn;
+
+  	   System.out.println(screenSize.getHeight() + " is the height in pixels");
+  	   System.out.println(screenSize.getWidth() + " is the width in pixels");
     	
     	fatColorName[0] = "fatBlue.png";
         fatColorName[1] = "fatRed.png";
@@ -81,7 +87,7 @@ class Card {
  	       for(int i = 0; i < 3; i++){
  		        label[i] = new JLabel();
  		        Image image = icon[i].getImage(); // transform it 
- 		        Image newimg = image.getScaledInstance((int)(374/2), (int)(422/2),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+ 		        Image newimg = image.getScaledInstance((int)(374/3), (int)(422/3),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
  		        icon[i] = new ImageIcon(newimg);  // transform it back
  		        label[i].setIcon(icon[i]);
  		        button.add(label[i]);
