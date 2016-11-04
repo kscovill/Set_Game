@@ -14,6 +14,7 @@ public class Deck{
 	    protected JLabel cardJLabel[][] = new JLabel[81][3]; // the container for the Image (of a bug)
 	    protected Card card[] = new Card[81];
 	    protected ArrayList<Card> list;
+	    protected int num_decks;
 	    
 	    protected void Shuffle(){
 	    	
@@ -21,20 +22,22 @@ public class Deck{
 	    protected void makeDeck(){
 	    	list = new ArrayList();
 	    	int count = 0;
-	    	for(int i =0;i<3;i++){
-	        	for(int j = 0; j<3; j++){
-	        		for (int k = 0; k<3; k++){
-	        			for(int m=0; m<3;m++){
-	        				
-	        				card[count] = new Card(cardJFrame,panel,count,0,i,j,k,m);
-	        				list.add(card[count]);
-	        				count++;
-	        				//System.out.println("Card with: " + i + j + k + m + "count: " + count);
-	        				
-	        			}
-	        		}	
-	        	}
-	        }
+	    	for(int c = 0; c < num_decks; c++){
+		    	for(int i =0;i<3;i++){
+		        	for(int j = 0; j<3; j++){
+		        		for (int k = 0; k<3; k++){
+		        			for(int m=0; m<3;m++){
+		        				
+		        				card[count] = new Card(cardJFrame,panel,count,0,i,j,k,m);
+		        				list.add(card[count]);
+		        				count++;
+		        				//System.out.println("Card with: " + i + j + k + m + "count: " + count);
+		        				
+		        			}
+		        		}	
+		        	}
+		        }
+	    	}
 	    	
 	    	for (int i =0;i<10;i++){
 	    		Collections.shuffle(list);
@@ -42,9 +45,10 @@ public class Deck{
 	    	//System.out.println(list);
 	    }
 	    
-	    public Deck(JFrame passedInJFrame, JPanel panel1){
+	    public Deck(JFrame passedInJFrame, JPanel panel1, int num_of_decks){
 	        cardJFrame = passedInJFrame;
 	        panel = panel1;
+	        num_decks = num_of_decks;
 	        makeDeck();
 	      /*for (int i =0; i <12;i++){  
 	        card[i] = new Card(cardJFrame,i,0,(int)(i%3),1,1,1);
