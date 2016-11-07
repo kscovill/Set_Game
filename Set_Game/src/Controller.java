@@ -127,8 +127,12 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
         
 	}
 	public static void main( String args[]){
-        Controller myController = new Controller("Advanced Set", 60,10, (int)screenSize.getWidth() - 120, (int)screenSize.getHeight() - 80);// window title, int gameWindowX, int gameWindowY, int gameWindowWidth, int gameWindowHeight){
-        
+		if(/*screenSize.getWidth()*/ 1280<1800){				
+			Controller myController = new Controller("Advanced Set", 60,10, /*(int)screenSize.getWidth()*/1280 - 40, /*(int)screenSize.getHeight()*/800 - 40);// window title, int gameWindowX, int gameWindowY, int gameWindowWidth, int gameWindowHeight){
+		}else{
+			Controller myController = new Controller("Advanced Set", 60,10, 1920-120, 1080-80);// window title, int gameWindowX, int gameWindowY, int gameWindowWidth, int gameWindowHeight){
+			
+		}
 	}
 	public void restart(){
 		
@@ -207,7 +211,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 	}
 	public void drawCards(ArrayList<Card> play){
 		System.out.print("BEFORE DRAWING, THERE ARE : " + play.size() + "IN THE ARRAY");
-		if (screenSize.getWidth() < 1800){
+		if (/*screenSize.getWidth()*/ 1280 < 1800){
 			w = 5/3;
 			h = 300/220;
 		}else{
@@ -217,7 +221,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		
 		for ( int i =0; i < play.size(); i++){
 			playable.get(i).button.setVisible(false);
-        	playable.get(i).button.setBounds((20+(int)(i%(play.size()/3))*(int)((double)200/w)), 50 + ((int)(i/(play.size()/3))*(int)((double)300/h)), playable.get(0).getWidth()-20, playable.get(0).getHeight()+50);
+        	playable.get(i).button.setBounds((20+(int)(i%(play.size()/3))*(int)((double)120)), 50 + ((int)(i/(play.size()/3))*(int)((double)220)), playable.get(0).getWidth()-20, playable.get(0).getHeight()+50);
         	playable.get(i).button.setVisible(true);
         	/*System.out.println(play.get(i));
         	System.out.println(play.get(i).getOrn());

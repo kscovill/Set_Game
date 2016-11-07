@@ -81,7 +81,7 @@ class Card {
 		icon[1] = new ImageIcon(ornamentName[orn]);
 		icon[0] = new ImageIcon(topperName[top]);
 		
-       if(screenSize.getWidth() < 1800){
+       if(/*screenSize.getWidth()*/1280 < 1800){
     	   div = 3;
        }
        else{
