@@ -34,6 +34,7 @@ class Card {
     protected int Topper;
     protected int Colors;
     protected int mouseCounter;
+    protected int div = 3;
     protected Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     
     public Card(JFrame myJFrame, JPanel panel, int cardNumber, int directionChangeProbability, int tree, int orn, int top, int color){
@@ -80,14 +81,19 @@ class Card {
 		icon[1] = new ImageIcon(ornamentName[orn]);
 		icon[0] = new ImageIcon(topperName[top]);
 		
-       
+       if(screenSize.getWidth() < 1800){
+    	   div = 3;
+       }
+       else{
+    	   div = 2;
+       }
         
         
      	   button = new JButton();
  	       for(int i = 0; i < 3; i++){
  		        label[i] = new JLabel();
  		        Image image = icon[i].getImage(); // transform it 
- 		        Image newimg = image.getScaledInstance((int)(374/3), (int)(422/3),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+ 		        Image newimg = image.getScaledInstance((int)(374/div), (int)(422/div),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
  		        icon[i] = new ImageIcon(newimg);  // transform it back
  		        label[i].setIcon(icon[i]);
  		        button.add(label[i]);

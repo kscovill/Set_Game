@@ -2,6 +2,8 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -48,7 +50,10 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
     private final int MAX_DECKS = 1;
     private boolean CHEAT = false;
     private final int GOAL = 4;
-    
+    private int div;
+    protected static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    protected double w;
+    protected double h;
     
     protected String fatColorName[] = new String[3];
     protected String mediumColorName[] = new String[3];
@@ -122,7 +127,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
         
 	}
 	public static void main( String args[]){
-        Controller myController = new Controller("Advanced Set", 75,10, 1800, 1000);// window title, int gameWindowX, int gameWindowY, int gameWindowWidth, int gameWindowHeight){
+        Controller myController = new Controller("Advanced Set", 60,10, (int)screenSize.getWidth() - 120, (int)screenSize.getHeight() - 80);// window title, int gameWindowX, int gameWindowY, int gameWindowWidth, int gameWindowHeight){
         
 	}
 	public void restart(){
@@ -202,9 +207,17 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 	}
 	public void drawCards(ArrayList<Card> play){
 		System.out.print("BEFORE DRAWING, THERE ARE : " + play.size() + "IN THE ARRAY");
+		if (screenSize.getWidth() < 1800){
+			w = 5/3;
+			h = 300/220;
+		}else{
+			w = 1;
+			h=1;
+		}
+		
 		for ( int i =0; i < play.size(); i++){
 			playable.get(i).button.setVisible(false);
-        	playable.get(i).button.setBounds((20+(int)(i%(play.size()/3))*200), 50 + ((int)(i/(play.size()/3))*300), playable.get(0).getWidth()-20, playable.get(0).getHeight()+50);
+        	playable.get(i).button.setBounds((20+(int)(i%(play.size()/3))*(int)((double)200/w)), 50 + ((int)(i/(play.size()/3))*(int)((double)300/h)), playable.get(0).getWidth()-20, playable.get(0).getHeight()+50);
         	playable.get(i).button.setVisible(true);
         	/*System.out.println(play.get(i));
         	System.out.println(play.get(i).getOrn());
