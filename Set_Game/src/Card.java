@@ -99,6 +99,10 @@ class Card {
  		        button.add(label[i]);
  		        button.setLayout(null);
  		        button.setBackground(Color.GRAY);
+ 		        button.setOpaque(true);
+ 		        label[i].setVisible(false);
+ 		        label[i].setVisible(true); 
+ 		        System.out.println(button.getBackground());
  		        label[i].setBounds(-10, 25, icon[0].getIconWidth(), icon[0].getIconHeight());
  		        
  		        

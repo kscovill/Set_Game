@@ -9,10 +9,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.TimerTask;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -314,7 +318,6 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		if (playerScore == GOAL){
 			for(int j =0; j< playable.size();j++){
 				playable.get(j).button.setVisible(false);
-				
 			}
 			for(int i =0; i < gameDeck.list.size();i++){
 				gameDeck.list.get(i).button.setVisible(false);
@@ -361,7 +364,17 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 				numHighlighted++;
 				checkables[numHighlighted-1] = playable.get(i);
 				if(numHighlighted == 3){
-					if(isThereASet(checkables[0],checkables[1],checkables[2])==1){
+					if(isThereASet(checkables[0],checkables[1],checkables[2])==1)
+					{
+						try 
+						{
+							Sound();
+							System.out.println("A sound was played");
+						} 
+						catch (Exception e) 
+						{
+							e.printStackTrace();
+						}
 						System.out.println("That was a set!");
 						for(int q =0; q < checkables.length; q++){
 							
@@ -464,4 +477,26 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		
 	}
 	
+	private void Sound() throws Exception
+	{ //From stack Over Flow
+		try 
+		{
+	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("/Users/Natalie/documents/workspace/santaLaugh.wav").getAbsoluteFile());
+	        Clip clip = AudioSystem.getClip();
+	        clip.open(audioInputStream);
+	        clip.start();
+	    } 
+		catch(Exception ex) 
+		{
+	        System.out.println("Error with playing sound.");
+	        ex.printStackTrace();
+	    }
+		/*
+		File url = new File("/Users/Natalie/documents/workspace/santaLaugh.mp3");
+		Clip clip = AudioSystem.getClip();
+		// getAudioInputStream() also accepts a File or InputStream
+		AudioInputStream ais = AudioSystem.getAudioInputStream( url );
+		clip.open(ais);
+	    clip.loop(0);  */ 
+	}
 }
