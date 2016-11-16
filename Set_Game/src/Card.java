@@ -1,5 +1,6 @@
 import javax.swing.JFrame; // for JFrame
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 import java.awt.Color;
@@ -37,7 +38,7 @@ class Card {
     protected int div = 3;
     protected Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     
-    public Card(JFrame myJFrame, JPanel panel, int cardNumber, int directionChangeProbability, int tree, int orn, int top, int color){
+    public Card(JFrame myJFrame, JLayeredPane panel, int cardNumber, int directionChangeProbability, int tree, int orn, int top, int color){
     	
     	Colors = color;
     	Topper = top;

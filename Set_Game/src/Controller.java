@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.TimerTask;
 
+import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -22,6 +23,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -58,14 +60,14 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
     protected static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     protected double w;
     protected double h;
-    
+    JLabel background = new JLabel(new ImageIcon("winterGround.png"));
     protected String fatColorName[] = new String[3];
     protected String mediumColorName[] = new String[3];
     protected String skinnyColorName[] = new String[3];
     protected String ornamentName[] = new String[3];
     protected String topperName[] = new String[3];
     protected JPanel panel = new JPanel();
-    protected JPanel gamePanel = new JPanel();
+    protected JLayeredPane gamePanel = new JLayeredPane();
     protected JButton pauseButton;
         
 	public Controller(String passedInWindowTitle, 
@@ -80,7 +82,11 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
         panel.setBounds(0, 0, 380, gameWindowHeight);
         gamePanel.setBounds(380, 0, gameWindowWidth - 380, gameWindowHeight);
         panel.setBackground(Color.GRAY);
-        gamePanel.setBackground(Color.BLACK);
+        JLabel background = new JLabel(new ImageIcon("winterGround.png"));
+        background.setSize(gamePanel.getWidth(), 1150);
+        gamePanel.add(background); 
+        gamePanel.getComponentZOrder(background);
+        System.out.println("z component is: " + gamePanel.getComponentZOrder(background));
         gamePanel.setVisible(true);
         panel.setVisible(true);
         gamePanel.setLayout(null);
@@ -233,7 +239,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
         	System.out.println(play.get(i).getColors());
         	System.out.println(play.get(i).getSize());*/
         }
-		
+		gamePanel.setComponentZOrder(background, 0);
 		gameJFrame.getContentPane().repaint();
 		
 	}

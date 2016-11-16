@@ -6,11 +6,12 @@ import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 public class Deck{
 	    protected JFrame cardJFrame;
-	    protected JPanel panel;
+	    protected JLayeredPane panel;
 	    protected JLabel cardJLabel[][] = new JLabel[81][3]; // the container for the Image (of a bug)
 	    protected Card card[] = new Card[81];
 	    protected ArrayList<Card> list;
@@ -45,7 +46,7 @@ public class Deck{
 	    	//System.out.println(list);
 	    }
 	    
-	    public Deck(JFrame passedInJFrame, JPanel panel1, int num_of_decks){
+	    public Deck(JFrame passedInJFrame, JLayeredPane panel1, int num_of_decks){
 	        cardJFrame = passedInJFrame;
 	        panel = panel1;
 	        num_decks = num_of_decks;
