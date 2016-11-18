@@ -60,7 +60,9 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
     protected static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     protected double w;
     protected double h;
-    JLabel background = new JLabel(new ImageIcon("winterGround.png"));
+    private static boolean LOOP = true;
+    private static boolean NO_LOOP = false;
+    JLabel background;
     protected String fatColorName[] = new String[3];
     protected String mediumColorName[] = new String[3];
     protected String skinnyColorName[] = new String[3];
@@ -74,23 +76,31 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 	        int gameWindowX, int gameWindowY, int gameWindowWidth, int gameWindowHeight){
 		
 		gameJFrame = new JFrame(passedInWindowTitle);
+		gameJFrame.setVisible(false);
         gameJFrame.setSize(gameWindowWidth, gameWindowHeight);
         gameJFrame.setLocation(gameWindowX, gameWindowY);
         gameJFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
+        if(screenSize.getWidth() < 1800){
+        	background = new JLabel(new ImageIcon("winterGround1.png"));
+
+        	background.setBounds(0, -100, gamePanel.getWidth(), gamePanel.getHeight());
+        }else{
+        	background = new JLabel(new ImageIcon("winterGround.png"));
+        }
         
         panel.setBounds(0, 0, 380, gameWindowHeight);
         gamePanel.setBounds(380, 0, gameWindowWidth - 380, gameWindowHeight);
         panel.setBackground(Color.GRAY);
-        JLabel background = new JLabel(new ImageIcon("winterGround.png"));
         background.setSize(gamePanel.getWidth(), 1150);
         gamePanel.add(background); 
-        gamePanel.getComponentZOrder(background);
-        System.out.println("z component is: " + gamePanel.getComponentZOrder(background));
+        
+        
         gamePanel.setVisible(true);
         panel.setVisible(true);
         gamePanel.setLayout(null);
         panel.setLayout(null);
+        
         
         gameJFrame.add(panel);
         gameJFrame.add(gamePanel);
@@ -128,16 +138,16 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
         scoreKeeper.setBounds(50,200,280,400);
         scoreKeeper.setVisible(true);
         panel.repaint();
-        gameJFrame.setVisible(true);
         gameJFrame.getContentPane().repaint();
         gameTimer.schedule(this, 0, 250);
-        
+
+        gameJFrame.setVisible(false);
         restart();
         //drawCards(playable);
         
 	}
 	public static void main( String args[]){
-		if(/*screenSize.getWidth()*/ 1280<1800){				
+		if(screenSize.getWidth()<1800){				
 			Controller myController = new Controller("Advanced Set", 20,0, /*(int)screenSize.getWidth()*/1280 - 40, /*(int)screenSize.getHeight()*/800 - 120);// window title, int gameWindowX, int gameWindowY, int gameWindowWidth, int gameWindowHeight){
 		}else{
 			Controller myController = new Controller("Advanced Set", 60,10, 1920-120, 1080-80);// window title, int gameWindowX, int gameWindowY, int gameWindowWidth, int gameWindowHeight){
@@ -146,7 +156,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 	}
 	public void restart(){
 		
-		
+		gameJFrame.setVisible(true);
 		
 		gameDeck = new Deck(gameJFrame,gamePanel,MAX_DECKS);
 		playerScore =0;
@@ -192,8 +202,8 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 			playable.get(i).button.setBorder(null);
 		}
 		
-		System.out.println(playable.size() + " on the field");
-		System.out.println(gameDeck.list.size() + " Cards left in Deck");
+		//System.out.println(playable.size() + " on the field");
+		//System.out.println(gameDeck.list.size() + " Cards left in Deck");
 		int sets = 0;
 		int size = playable.size();
 		for (int i =0; i < size;i++){
@@ -207,7 +217,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		}
 		System.out.println("There is/are " + sets + " set(s) on the table.");
 		if(sets ==0 || playable.size() < MIN_CARDS){
-			System.out.println("The size of the gameDeck is " + gameDeck.list.size());
+			//System.out.println("The size of the gameDeck is " + gameDeck.list.size());
 			if(!gameDeck.list.isEmpty()){
 				for(int h = 0; h < 3; h++){
 					playable.add(gameDeck.list.get(0));
@@ -220,18 +230,17 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		drawCards(playable);
 	}
 	public void drawCards(ArrayList<Card> play){
-		System.out.print("BEFORE DRAWING, THERE ARE : " + play.size() + "IN THE ARRAY");
-		if (/*screenSize.getWidth()*/ 1280 < 1800){
-			w = 5/3;
-			h = 300/220;
-		}else{
-			w = 1;
-			h=1;
-		}
+		//System.out.print("BEFORE DRAWING, THERE ARE : " + play.size() + "IN THE ARRAY");
+		
 		
 		for ( int i =0; i < play.size(); i++){
 			playable.get(i).button.setVisible(false);
-        	playable.get(i).button.setBounds((20+(int)(i%(play.size()/3))*(int)((double)120)), 10 + ((int)(i/(play.size()/3))*(int)((double)220)), playable.get(0).getWidth()-20, playable.get(0).getHeight()+50);
+			if (screenSize.getWidth()< 1800){
+				playable.get(i).button.setBounds((20+(int)(i%(play.size()/3))*(int)((double)120)), 10 + ((int)(i/(play.size()/3))*(int)((double)(220))), playable.get(0).getWidth()-20, playable.get(0).getHeight()+50);
+			}else{
+				playable.get(i).button.setBounds((20+(int)(i%(play.size()/3))*(int)((double)200)), 40 + ((int)(i/(play.size()/3))*(int)((double)(300))), playable.get(0).getWidth()-20, playable.get(0).getHeight()+50);
+				
+			}
         	playable.get(i).button.setVisible(true);
         	/*System.out.println(play.get(i));
         	System.out.println(play.get(i).getOrn());
@@ -239,7 +248,9 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
         	System.out.println(play.get(i).getColors());
         	System.out.println(play.get(i).getSize());*/
         }
-		gamePanel.setComponentZOrder(background, 0);
+
+		gamePanel.setComponentZOrder(background,gamePanel.getComponentCount()-1);
+		gamePanel.repaint();
 		gameJFrame.getContentPane().repaint();
 		
 	}
@@ -362,6 +373,10 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		if(counter%4 == 0){
 			if(pauseTimer != 0){
 				pauseTimer--;
+				if (pauseTimer < 1){
+					playerScore--;
+					scoreKeeper.setText(Integer.toString(playerScore));
+				}
 				//System.out.println(pauseTimer);
 			}
 		}
@@ -374,7 +389,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 					{
 						try 
 						{
-							Sound();
+							Sound("santaLaugh.wav",NO_LOOP);
 							System.out.println("A sound was played");
 						} 
 						catch (Exception e) 
@@ -483,14 +498,22 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		
 	}
 	
-	private void Sound() throws Exception
+	@SuppressWarnings("static-access")
+	private void Sound(String soundFile, boolean looper) throws Exception
 	{ //From stack Over Flow
 		try 
 		{
-	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("/Users/Natalie/documents/workspace/santaLaugh.wav").getAbsoluteFile());
+			int loop;
+			if (looper == true){
+				loop = Clip.LOOP_CONTINUOUSLY;
+			}else{
+				loop = 0;
+			}
+	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundFile).getAbsoluteFile());
 	        Clip clip = AudioSystem.getClip();
 	        clip.open(audioInputStream);
 	        clip.start();
+	        clip.loop(loop);
 	    } 
 		catch(Exception ex) 
 		{
