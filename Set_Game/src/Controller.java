@@ -159,6 +159,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		
 		while(!gameReady)
 		{
+			gameReady = true; 
 			JFrame gameStart = new JFrame(); 
 			gameStart.setBounds(300,400, 400, 400);
 			gameStart.setLayout(new BorderLayout());
@@ -168,9 +169,8 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 			gameStart.add(background2);
 			JButton start = new JButton("Play"); 
 			JButton quit = new JButton("Quit"); 
-			gameStart.add(start); 
-			gameStart.add(quit); 
-			gameStart.setVisible(true);
+			start.setBounds(100,100,80,80);
+			quit.setBounds(100,100,80,80);
 			start.addActionListener(new ActionListener() 
 			{
 				@Override
@@ -187,6 +187,9 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 					System.exit(1);
 				}	  
 		    });
+			gameStart.add(start); 
+			gameStart.add(quit); 
+			gameStart.setVisible(true);
 		}
 		
 		String player = new String();
