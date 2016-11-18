@@ -142,7 +142,10 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
         gameTimer.schedule(this, 0, 250);
 
         gameJFrame.setVisible(false);
-        restart();
+        
+        
+        wannaPlay();
+  
         //drawCards(playable);
         
 	}
@@ -528,4 +531,39 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		clip.open(ais);
 	    clip.loop(0);  */ 
 	}
+	private void wannaPlay(){
+	
+		JFrame gameStart = new JFrame(); 
+		gameStart.setBounds(300,400, 400, 400);
+		gameStart.setLayout(null);
+		gameStart.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		ImageIcon background1 = new ImageIcon("snowBackground.png"); 
+		JLabel background2 = new JLabel(background1); 
+		gameStart.add(background2);
+		JButton start = new JButton("Play"); 
+		JButton quit = new JButton("Quit"); 
+		gameStart.add(start); 
+		gameStart.add(quit); 
+		gameStart.setVisible(true);
+		start.addActionListener(new ActionListener() 
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				gameReady = true;
+				gameStart.setVisible(false);
+			    restart();
+			}	  
+	    });
+		quit.addActionListener(new ActionListener() 
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				System.exit(1);
+			}	  
+	    });
+	}
+
+	
 }
