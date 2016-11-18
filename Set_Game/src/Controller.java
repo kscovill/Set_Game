@@ -554,11 +554,11 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 	private void wannaPlay(){
 	
 		JFrame gameStart = new JFrame(); 
-		gameStart.setBounds(300,400, 400, 500);
+		gameStart.setBounds(1000,700, 1000, 678);
 		gameStart.setLocationRelativeTo(null);
 		gameStart.setLayout(null);
 		gameStart.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		ImageIcon background1 = new ImageIcon("snowBackground.png"); 
+		ImageIcon background1 = new ImageIcon("background.png"); 
 		JLabel background2 = new JLabel(background1); 
 		gameStart.add(background2);
 		background2.setBounds(0, 0, gameStart.getWidth(), gameStart.getHeight());
