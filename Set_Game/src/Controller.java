@@ -1,4 +1,6 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Image;
@@ -155,15 +157,36 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		CHEAT = false;
 		
 		
-		while(!gameReady){
-			int dialogResult = JOptionPane.showConfirmDialog(null, "Are you ready?");
-			if(dialogResult == JOptionPane.YES_OPTION){
-				gameReady = true;
-				break;
-			}if(dialogResult == JOptionPane.CANCEL_OPTION || dialogResult == JOptionPane.NO_OPTION){
-				System.exit(1);
-			}
-			
+		while(!gameReady)
+		{
+			JFrame gameStart = new JFrame(); 
+			gameStart.setBounds(300,400, 400, 400);
+			gameStart.setLayout(new BorderLayout());
+			gameStart.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			ImageIcon background1 = new ImageIcon("snowBackground.png"); 
+			JLabel background2 = new JLabel(background1); 
+			gameStart.add(background2);
+			JButton start = new JButton("Play"); 
+			JButton quit = new JButton("Quit"); 
+			gameStart.add(start); 
+			gameStart.add(quit); 
+			gameStart.setVisible(true);
+			start.addActionListener(new ActionListener() 
+			{
+				@Override
+				public void actionPerformed(ActionEvent arg0) 
+				{
+					gameReady = true;
+				}	  
+		    });
+			quit.addActionListener(new ActionListener() 
+			{
+				@Override
+				public void actionPerformed(ActionEvent arg0) 
+				{
+					System.exit(1);
+				}	  
+		    });
 		}
 		
 		String player = new String();
