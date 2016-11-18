@@ -73,6 +73,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
     protected JPanel panel = new JPanel();
     protected JLayeredPane gamePanel = new JLayeredPane();
     protected JButton pauseButton;
+    protected Sound santa = new Sound();
         
 	public Controller(String passedInWindowTitle, 
 	        int gameWindowX, int gameWindowY, int gameWindowWidth, int gameWindowHeight){
@@ -97,7 +98,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
         background.setSize(gamePanel.getWidth(), 1150);
         gamePanel.add(background); 
         
-        
+        santa.SetMusic("santaLaugh.wav");
         
         gamePanel.setVisible(true);
         panel.setVisible(true);
@@ -142,14 +143,14 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
         panel.add(numsets);
         panel.add(info);
         scoreKeeper.setFont(new Font("Serif", Font.PLAIN, 65));
-        scoreKeeper.setBounds(50,200,280,400);
+        scoreKeeper.setBounds(0,panel.getHeight()/2,panel.getWidth(),70);
         scoreKeeper.setVisible(true);
         numsets.setFont(new Font("Serif", Font.PLAIN, 30));
-        numsets.setBounds(0, panel.getHeight()/2+100, panel.getWidth(), 45);
+        numsets.setBounds(0, panel.getHeight()/4*3, panel.getWidth(), 45);
         numsets.setVisible(true);
         info.setText("That was not a Set!");
         info.setFont(new Font("Serif", Font.PLAIN, 30));
-        info.setBounds(0, panel.getHeight()/3-100, panel.getWidth(), 45);
+        info.setBounds(0, panel.getHeight()/4, panel.getWidth(), 45);
         info.setVisible(true);
         
         
@@ -415,7 +416,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 					{
 						try 
 						{
-							Sound("santaLaugh.wav",NO_LOOP);
+							santa.playSound(NO_LOOP);
 						} 
 						catch (Exception e) 
 						{
@@ -436,6 +437,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 						
 						numHighlighted =0;
 						pauseTimer = 0;
+						
 						playerScore++;
 						scoreKeeper.setText("Score: " + Integer.toString(playerScore));
 						makeDeck();
@@ -521,36 +523,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		
 	}
 	
-	@SuppressWarnings("static-access")
-	private void Sound(String soundFile, boolean looper) throws Exception
-	{ //From stack Over Flow
-		try 
-		{
-			int loop;
-			if (looper == true){
-				loop = Clip.LOOP_CONTINUOUSLY;
-			}else{
-				loop = 0;
-			}
-	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundFile).getAbsoluteFile());
-	        Clip clip = AudioSystem.getClip();
-	        clip.open(audioInputStream);
-	        clip.start();
-	        clip.loop(loop);
-	    } 
-		catch(Exception ex) 
-		{
-	        System.out.println("Error with playing sound.");
-	        ex.printStackTrace();
-	    }
-		/*
-		File url = new File("/Users/Natalie/documents/workspace/santaLaugh.mp3");
-		Clip clip = AudioSystem.getClip();
-		// getAudioInputStream() also accepts a File or InputStream
-		AudioInputStream ais = AudioSystem.getAudioInputStream( url );
-		clip.open(ais);
-	    clip.loop(0);  */ 
-	}
+	
 	private void wannaPlay(){
 	
 		JFrame gameStart = new JFrame(); 
@@ -566,9 +539,11 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		JButton quit = new JButton("Quit"); 
 		gameStart.add(start); 
 		gameStart.add(quit); 
-		start.setBounds(gameStart.getWidth()/2-35,gameStart.getHeight()/2+100,70,30);
-		quit.setBounds(gameStart.getWidth()/2-35,gameStart.getHeight()/2+135,70,30);
-		gameStart.getContentPane().repaint();
+		start.setBounds(gameStart.getWidth()/2-70,gameStart.getHeight()/2+150,150,50);
+		quit.setBounds(gameStart.getWidth()/2-70,gameStart.getHeight()/2+210,150,50);
+		start.setVisible(true);
+		quit.setVisible(true);
+		gameStart.repaint();
 		gameStart.setVisible(true);
 		start.addActionListener(new ActionListener() 
 		{
