@@ -1,6 +1,4 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Image;
@@ -52,6 +50,8 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
     private boolean stopRandom = false;
     private JLabel playerName;
     private JLabel scoreKeeper;
+    private JLabel numsets;
+    private JLabel info;
     private Card[] checkables = new Card[3];
     private int playerScore =0;
     private final int MIN_CARDS = 12;
@@ -62,7 +62,9 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
     protected static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     protected double w;
     protected double h;
-    JLabel background = new JLabel(new ImageIcon("winterGround.png"));
+    private static boolean LOOP = true;
+    private static boolean NO_LOOP = false;
+    JLabel background;
     protected String fatColorName[] = new String[3];
     protected String mediumColorName[] = new String[3];
     protected String skinnyColorName[] = new String[3];
@@ -71,28 +73,40 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
     protected JPanel panel = new JPanel();
     protected JLayeredPane gamePanel = new JLayeredPane();
     protected JButton pauseButton;
+    protected Sound santa = new Sound();
+    protected Sound bells = new Sound(); 
+    protected Sound jingle = new Sound(); 
         
 	public Controller(String passedInWindowTitle, 
 	        int gameWindowX, int gameWindowY, int gameWindowWidth, int gameWindowHeight){
 		
 		gameJFrame = new JFrame(passedInWindowTitle);
+		gameJFrame.setVisible(false);
         gameJFrame.setSize(gameWindowWidth, gameWindowHeight);
         gameJFrame.setLocation(gameWindowX, gameWindowY);
         gameJFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
+        if(screenSize.getWidth() < 1800){
+        	background = new JLabel(new ImageIcon("winterGround1.png"));
+
+        	background.setBounds(0, -100, gamePanel.getWidth(), gamePanel.getHeight());
+        }else{
+        	background = new JLabel(new ImageIcon("winterGround.png"));
+        }
         
         panel.setBounds(0, 0, 380, gameWindowHeight);
         gamePanel.setBounds(380, 0, gameWindowWidth - 380, gameWindowHeight);
         panel.setBackground(Color.GRAY);
-        JLabel background = new JLabel(new ImageIcon("winterGround.png"));
         background.setSize(gamePanel.getWidth(), 1150);
         gamePanel.add(background); 
-        gamePanel.getComponentZOrder(background);
-        System.out.println("z component is: " + gamePanel.getComponentZOrder(background));
+        
+        santa.SetMusic("santaLaugh.wav");
+        
         gamePanel.setVisible(true);
         panel.setVisible(true);
         gamePanel.setLayout(null);
         panel.setLayout(null);
+        
         
         gameJFrame.add(panel);
         gameJFrame.add(gamePanel);
@@ -125,21 +139,37 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
         playerName.setBounds(50, 75, 280, 25);
         playerName.setVisible(true);
         scoreKeeper = new JLabel(Integer.toString(playerScore), SwingConstants.CENTER);
+        numsets = new JLabel("", SwingConstants.CENTER);
+        info = new JLabel("", SwingConstants.CENTER);
         panel.add(scoreKeeper);
+        panel.add(numsets);
+        panel.add(info);
         scoreKeeper.setFont(new Font("Serif", Font.PLAIN, 65));
-        scoreKeeper.setBounds(50,200,280,400);
+        scoreKeeper.setBounds(0,panel.getHeight()/2,panel.getWidth(),70);
         scoreKeeper.setVisible(true);
+        numsets.setFont(new Font("Serif", Font.PLAIN, 30));
+        numsets.setBounds(0, panel.getHeight()/4*3, panel.getWidth(), 45);
+        numsets.setVisible(true);
+        info.setText("That was not a Set!");
+        info.setFont(new Font("Serif", Font.PLAIN, 30));
+        info.setBounds(0, panel.getHeight()/4, panel.getWidth(), 45);
+        info.setVisible(true);
+        
+        
         panel.repaint();
-        gameJFrame.setVisible(true);
         gameJFrame.getContentPane().repaint();
         gameTimer.schedule(this, 0, 250);
+
+        gameJFrame.setVisible(false);
         
-        restart();
+        
+        wannaPlay();
+  
         //drawCards(playable);
         
 	}
 	public static void main( String args[]){
-		if(/*screenSize.getWidth()*/ 1280<1800){				
+		if(screenSize.getWidth()<1800){				
 			Controller myController = new Controller("Advanced Set", 20,0, /*(int)screenSize.getWidth()*/1280 - 40, /*(int)screenSize.getHeight()*/800 - 120);// window title, int gameWindowX, int gameWindowY, int gameWindowWidth, int gameWindowHeight){
 		}else{
 			Controller myController = new Controller("Advanced Set", 60,10, 1920-120, 1080-80);// window title, int gameWindowX, int gameWindowY, int gameWindowWidth, int gameWindowHeight){
@@ -148,7 +178,9 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 	}
 	public void restart(){
 		
-		
+		jingle.SetMusic("jinglePiano.wav");
+		jingle.playSound(LOOP);
+		gameJFrame.setVisible(true);
 		
 		gameDeck = new Deck(gameJFrame,gamePanel,MAX_DECKS);
 		playerScore =0;
@@ -157,40 +189,16 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		CHEAT = false;
 		
 		
-		while(!gameReady)
-		{
-			gameReady = true; 
-			JFrame gameStart = new JFrame(); 
-			gameStart.setBounds(300,400, 400, 400);
-			gameStart.setLayout(new BorderLayout());
-			gameStart.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			ImageIcon background1 = new ImageIcon("snowBackground.png"); 
-			JLabel background2 = new JLabel(background1); 
-			gameStart.add(background2);
-			JButton start = new JButton("Play"); 
-			JButton quit = new JButton("Quit"); 
-			start.setBounds(100,100,80,80);
-			quit.setBounds(100,100,80,80);
-			start.addActionListener(new ActionListener() 
-			{
-				@Override
-				public void actionPerformed(ActionEvent arg0) 
-				{
-					gameReady = true;
-				}	  
-		    });
-			quit.addActionListener(new ActionListener() 
-			{
-				@Override
-				public void actionPerformed(ActionEvent arg0) 
-				{
-					System.exit(1);
-				}	  
-		    });
-			gameStart.add(start); 
-			gameStart.add(quit); 
-			gameStart.setVisible(true);
-		}
+		/*while(!gameReady){
+			int dialogResult = JOptionPane.showConfirmDialog(null, "Are you ready?");
+			if(dialogResult == JOptionPane.YES_OPTION){
+				gameReady = true;
+				break;
+			}if(dialogResult == JOptionPane.CANCEL_OPTION || dialogResult == JOptionPane.NO_OPTION){
+				System.exit(1);
+			}
+			
+		}*/
 		
 		String player = new String();
 		player = JOptionPane.showInputDialog("Please enter your name: ");
@@ -218,8 +226,8 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 			playable.get(i).button.setBorder(null);
 		}
 		
-		System.out.println(playable.size() + " on the field");
-		System.out.println(gameDeck.list.size() + " Cards left in Deck");
+		//System.out.println(playable.size() + " on the field");
+		//System.out.println(gameDeck.list.size() + " Cards left in Deck");
 		int sets = 0;
 		int size = playable.size();
 		for (int i =0; i < size;i++){
@@ -231,9 +239,9 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 				}
 			}
 		}
-		System.out.println("There is/are " + sets + " set(s) on the table.");
+		//System.out.println("There is/are " + sets + " set(s) on the table.");
 		if(sets ==0 || playable.size() < MIN_CARDS){
-			System.out.println("The size of the gameDeck is " + gameDeck.list.size());
+			//System.out.println("The size of the gameDeck is " + gameDeck.list.size());
 			if(!gameDeck.list.isEmpty()){
 				for(int h = 0; h < 3; h++){
 					playable.add(gameDeck.list.get(0));
@@ -244,20 +252,24 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		}
 		
 		drawCards(playable);
+		if(sets == 1){
+			numsets.setText("There is " + sets + " set on the table!");
+		}else{
+			numsets.setText("There are " + sets + " sets on the table!");
+		}
 	}
 	public void drawCards(ArrayList<Card> play){
-		System.out.print("BEFORE DRAWING, THERE ARE : " + play.size() + "IN THE ARRAY");
-		if (/*screenSize.getWidth()*/ 1280 < 1800){
-			w = 5/3;
-			h = 300/220;
-		}else{
-			w = 1;
-			h=1;
-		}
+		//System.out.print("BEFORE DRAWING, THERE ARE : " + play.size() + "IN THE ARRAY");
+		
 		
 		for ( int i =0; i < play.size(); i++){
 			playable.get(i).button.setVisible(false);
-        	playable.get(i).button.setBounds((20+(int)(i%(play.size()/3))*(int)((double)120)), 10 + ((int)(i/(play.size()/3))*(int)((double)220)), playable.get(0).getWidth()-20, playable.get(0).getHeight()+50);
+			if (screenSize.getWidth()< 1800){
+				playable.get(i).button.setBounds((20+(int)(i%(play.size()/3))*(int)((double)120)), 10 + ((int)(i/(play.size()/3))*(int)((double)(220))), playable.get(0).getWidth()-20, playable.get(0).getHeight()+50);
+			}else{
+				playable.get(i).button.setBounds((20+(int)(i%(play.size()/3))*(int)((double)200)), 40 + ((int)(i/(play.size()/3))*(int)((double)(300))), playable.get(0).getWidth()-20, playable.get(0).getHeight()+50);
+				
+			}
         	playable.get(i).button.setVisible(true);
         	/*System.out.println(play.get(i));
         	System.out.println(play.get(i).getOrn());
@@ -265,7 +277,9 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
         	System.out.println(play.get(i).getColors());
         	System.out.println(play.get(i).getSize());*/
         }
-		gamePanel.setComponentZOrder(background, 0);
+
+		gamePanel.setComponentZOrder(background,gamePanel.getComponentCount()-1);
+		gamePanel.repaint();
 		gameJFrame.getContentPane().repaint();
 		
 	}
@@ -388,6 +402,12 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		if(counter%4 == 0){
 			if(pauseTimer != 0){
 				pauseTimer--;
+				info.setText("Time Remaining: " + pauseTimer);
+				if (pauseTimer < 1){
+					playerScore--;
+					scoreKeeper.setText("Score: " + Integer.toString(playerScore));
+					info.setText("You ran out of time! SCORE -1");
+				}
 				//System.out.println(pauseTimer);
 			}
 		}
@@ -400,14 +420,12 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 					{
 						try 
 						{
-							Sound();
-							System.out.println("A sound was played");
+							santa.playSound(NO_LOOP);
 						} 
 						catch (Exception e) 
 						{
 							e.printStackTrace();
 						}
-						System.out.println("That was a set!");
 						for(int q =0; q < checkables.length; q++){
 							
 							for( int h = 0; h < playable.size();h++){
@@ -423,9 +441,9 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 						
 						numHighlighted =0;
 						pauseTimer = 0;
+						
 						playerScore++;
-						scoreKeeper.setText(Integer.toString(playerScore));
-						System.out.println("Player Score: " + playerScore);
+						scoreKeeper.setText("Score: " + Integer.toString(playerScore));
 						makeDeck();
 						
 					}
@@ -435,8 +453,8 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 							checkables[q].changeHighlight();
 						}
 						pauseTimer = 0;
-						System.out.println("That was not a set!");
-						
+						//System.out.println("That was not a set!");
+						info.setText("That was not a set!");
 					}
 					for(int w = 0; w < 3; w++){
 						checkables[w] = null;
@@ -462,7 +480,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 				}
 			}
 		}
-		
+		/*
 		//
 		// Every 20 Seconds (ADD WITHOUT MOUSE PRESS)
 		//
@@ -475,7 +493,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 				}
 			}
 		}
-		
+		*/
 	}
 	
 	@Override
@@ -509,26 +527,50 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		
 	}
 	
-	private void Sound() throws Exception
-	{ //From stack Over Flow
-		try 
+	
+	private void wannaPlay(){
+	
+        bells.SetMusic("bells.wav");
+        bells.playSound(LOOP);
+		JFrame gameStart = new JFrame(); 
+		gameStart.setBounds(1000,700, 1000, 678);
+		gameStart.setLocationRelativeTo(null);
+		gameStart.setLayout(null);
+		gameStart.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		ImageIcon background1 = new ImageIcon("background.png"); 
+		JLabel background2 = new JLabel(background1); 
+		gameStart.add(background2);
+		background2.setBounds(0, 0, gameStart.getWidth(), gameStart.getHeight());
+		JButton start = new JButton("Play"); 
+		JButton quit = new JButton("Quit"); 
+		gameStart.add(start); 
+		gameStart.add(quit); 
+		start.setBounds(gameStart.getWidth()/2-70,gameStart.getHeight()/2+150,150,50);
+		quit.setBounds(gameStart.getWidth()/2-70,gameStart.getHeight()/2+210,150,50);
+		start.setVisible(true);
+		quit.setVisible(true);
+		gameStart.repaint();
+		gameStart.setVisible(true);
+		start.addActionListener(new ActionListener() 
 		{
-	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("/Users/Natalie/documents/workspace/santaLaugh.wav").getAbsoluteFile());
-	        Clip clip = AudioSystem.getClip();
-	        clip.open(audioInputStream);
-	        clip.start();
-	    } 
-		catch(Exception ex) 
+			@Override
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				bells.stopSound();
+				gameReady = true;
+				gameStart.setVisible(false);
+			    restart();
+			}	  
+	    });
+		quit.addActionListener(new ActionListener() 
 		{
-	        System.out.println("Error with playing sound.");
-	        ex.printStackTrace();
-	    }
-		/*
-		File url = new File("/Users/Natalie/documents/workspace/santaLaugh.mp3");
-		Clip clip = AudioSystem.getClip();
-		// getAudioInputStream() also accepts a File or InputStream
-		AudioInputStream ais = AudioSystem.getAudioInputStream( url );
-		clip.open(ais);
-	    clip.loop(0);  */ 
+			@Override
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				System.exit(1);
+			}	  
+	    });
 	}
+
+	
 }

@@ -45,8 +45,8 @@ class Card {
     	Tree = tree;
     	Ornament = orn;
 
-  	   System.out.println(screenSize.getHeight() + " is the height in pixels");
-  	   System.out.println(screenSize.getWidth() + " is the width in pixels");
+  	   //System.out.println(screenSize.getHeight() + " is the height in pixels");
+  	   //System.out.println(screenSize.getWidth() + " is the width in pixels");
     	
     	fatColorName[0] = "fatBlue.png";
         fatColorName[1] = "fatRed.png";
@@ -82,7 +82,7 @@ class Card {
 		icon[1] = new ImageIcon(ornamentName[orn]);
 		icon[0] = new ImageIcon(topperName[top]);
 		
-       if(/*screenSize.getWidth()*/1280 < 1800){
+       if(screenSize.getWidth() < 1800){
     	   div = 3;
        }
        else{
@@ -103,7 +103,7 @@ class Card {
  		        button.setOpaque(true);
  		        label[i].setVisible(false);
  		        label[i].setVisible(true); 
- 		        System.out.println(button.getBackground());
+ 		        //System.out.println(button.getBackground());
  		        label[i].setBounds(-10, 25, icon[0].getIconWidth(), icon[0].getIconHeight());
  		        
  		        

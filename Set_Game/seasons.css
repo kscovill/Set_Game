@@ -1,0 +1,142 @@
+html body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	background-color: #6b92b9; 
+}
+body.class{
+	background-color: rgba(255, 0, 0,0); 
+	background-image: url('snow1.png'), url('snow2.png'), url('snow3.png');
+	 -webkit-animation: fall 20s linear infinite;
+}
+body.fall{
+	background-color: #C14313; 
+	background-image: url('fall1.png'), url('fall2.png'), url('fall3.png');
+	 -webkit-animation: fall 15s linear infinite;
+}
+body.sun{
+	background-color: #C14313; 
+	background-image: url('sun1.png'), url('sun2.png'), url('sun3.png');
+	 -webkit-animation: fall 20s linear infinite;
+}
+body.rain{
+	background-color: #255677; 
+	background-image: url('rain1.png'), url('rain2.png'), url('rain3.png');
+	 -webkit-animation: fall 3s linear infinite;
+}
+body.norm{
+	background-color: #255677; 
+	background-image: url('fall1.png'), url('snow1.png'), url('rain2.png'), url('sun3.png');
+	 -webkit-animation: fall 15s linear infinite;
+}
+@-webkit-keyframes fall {
+ 0% {background-position: 0px 0px;}
+ 100% {background-position: 500px 1000px, 400px 400px, 300px 300px, 200px 200px;}
+}
+h1{
+	font-size:72px;
+	color:#fcfcfc;
+	padding: 10px 15px;
+	margin-left: 24px;
+	margin-bottom:0px;
+	margin-top:-5px;
+	font-family:Georgia, serif;
+}
+h2{
+	text-align:center;
+	font-size:25px;
+	color:#fcfcfc;
+	padding: 10px 15px;
+	margin-left: 24px;
+	font-family:Georgia, serif;
+}
+#wrap {
+	width:70%;
+	margin: 0 auto;
+}
+header {
+	clear: both;
+	text-align:center;
+}
+#logo {
+	font-size:72px;
+}
+nav {
+	padding: 10px;
+}
+nav ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+nav li {
+	display: inline;
+	margin: 0 30px;
+}
+nav a {
+	color:#fcfcfc;
+	font-size:30px;
+	text-decoration:none;
+	font-weight: bold;
+}
+nav a:hover {
+	color: #BC7DAC;
+}
+section{
+	position:center;
+	margin:auto;
+}
+section#class {
+	background-color:rgba(61,168,255,.5);
+}
+section#fall {
+	background-color:rgba(217,213,22,.5);
+}
+section#sun {
+	background-color:rgba(129,92,14,.5);
+}
+
+section#rain{
+	background-color:rgba(25,26,28,.5);
+}
+section#norm{
+	background-color:rgba(25,26,28,.5);
+}
+.welcome {
+	padding: 10px 15px;
+	margin: 20px 0;
+	overflow: auto;
+}
+#center{
+	
+	margin:20%
+	padding:auto;
+}
+#something{
+	margin-right:10%;
+	margin-left:10%;
+	color:#fcfcfc;
+	font-size:26px;
+	margin-top:40%;
+}
+img{
+	width:20%;
+	float:left;
+	padding-left:4%;
+	padding-bottom:2%;
+	margin:auto;
+}
+
+figure img{
+	
+}
+footer {
+	background-color: rgba(0,0,0,0.3);
+	text-align:center;
+	padding: 10px;
+	color: white;
+	clear: both;
+}
+footer a {
+	color: white;
+}
