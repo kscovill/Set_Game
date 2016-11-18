@@ -50,6 +50,8 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
     private boolean stopRandom = false;
     private JLabel playerName;
     private JLabel scoreKeeper;
+    private JLabel numsets;
+    private JLabel info;
     private Card[] checkables = new Card[3];
     private int playerScore =0;
     private final int MIN_CARDS = 12;
@@ -96,6 +98,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
         gamePanel.add(background); 
         
         
+        
         gamePanel.setVisible(true);
         panel.setVisible(true);
         gamePanel.setLayout(null);
@@ -133,10 +136,23 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
         playerName.setBounds(50, 75, 280, 25);
         playerName.setVisible(true);
         scoreKeeper = new JLabel(Integer.toString(playerScore), SwingConstants.CENTER);
+        numsets = new JLabel("", SwingConstants.CENTER);
+        info = new JLabel("", SwingConstants.CENTER);
         panel.add(scoreKeeper);
+        panel.add(numsets);
+        panel.add(info);
         scoreKeeper.setFont(new Font("Serif", Font.PLAIN, 65));
         scoreKeeper.setBounds(50,200,280,400);
         scoreKeeper.setVisible(true);
+        numsets.setFont(new Font("Serif", Font.PLAIN, 30));
+        numsets.setBounds(0, panel.getHeight()/2+100, panel.getWidth(), 45);
+        numsets.setVisible(true);
+        info.setText("That was not a Set!");
+        info.setFont(new Font("Serif", Font.PLAIN, 30));
+        info.setBounds(0, panel.getHeight()/3-100, panel.getWidth(), 45);
+        info.setVisible(true);
+        
+        
         panel.repaint();
         gameJFrame.getContentPane().repaint();
         gameTimer.schedule(this, 0, 250);
@@ -168,7 +184,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		CHEAT = false;
 		
 		
-		while(!gameReady){
+		/*while(!gameReady){
 			int dialogResult = JOptionPane.showConfirmDialog(null, "Are you ready?");
 			if(dialogResult == JOptionPane.YES_OPTION){
 				gameReady = true;
@@ -177,7 +193,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 				System.exit(1);
 			}
 			
-		}
+		}*/
 		
 		String player = new String();
 		player = JOptionPane.showInputDialog("Please enter your name: ");
@@ -218,7 +234,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 				}
 			}
 		}
-		System.out.println("There is/are " + sets + " set(s) on the table.");
+		//System.out.println("There is/are " + sets + " set(s) on the table.");
 		if(sets ==0 || playable.size() < MIN_CARDS){
 			//System.out.println("The size of the gameDeck is " + gameDeck.list.size());
 			if(!gameDeck.list.isEmpty()){
@@ -231,6 +247,11 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		}
 		
 		drawCards(playable);
+		if(sets == 1){
+			numsets.setText("There is " + sets + " set on the table!");
+		}else{
+			numsets.setText("There are " + sets + " sets on the table!");
+		}
 	}
 	public void drawCards(ArrayList<Card> play){
 		//System.out.print("BEFORE DRAWING, THERE ARE : " + play.size() + "IN THE ARRAY");
@@ -376,9 +397,11 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		if(counter%4 == 0){
 			if(pauseTimer != 0){
 				pauseTimer--;
+				info.setText("Time Remaining: " + pauseTimer);
 				if (pauseTimer < 1){
 					playerScore--;
-					scoreKeeper.setText(Integer.toString(playerScore));
+					scoreKeeper.setText("Score: " + Integer.toString(playerScore));
+					info.setText("You ran out of time! SCORE -1");
 				}
 				//System.out.println(pauseTimer);
 			}
@@ -393,13 +416,11 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 						try 
 						{
 							Sound("santaLaugh.wav",NO_LOOP);
-							System.out.println("A sound was played");
 						} 
 						catch (Exception e) 
 						{
 							e.printStackTrace();
 						}
-						System.out.println("That was a set!");
 						for(int q =0; q < checkables.length; q++){
 							
 							for( int h = 0; h < playable.size();h++){
@@ -416,8 +437,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 						numHighlighted =0;
 						pauseTimer = 0;
 						playerScore++;
-						scoreKeeper.setText(Integer.toString(playerScore));
-						System.out.println("Player Score: " + playerScore);
+						scoreKeeper.setText("Score: " + Integer.toString(playerScore));
 						makeDeck();
 						
 					}
@@ -427,8 +447,8 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 							checkables[q].changeHighlight();
 						}
 						pauseTimer = 0;
-						System.out.println("That was not a set!");
-						
+						//System.out.println("That was not a set!");
+						info.setText("That was not a set!");
 					}
 					for(int w = 0; w < 3; w++){
 						checkables[w] = null;
@@ -454,7 +474,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 				}
 			}
 		}
-		
+		/*
 		//
 		// Every 20 Seconds (ADD WITHOUT MOUSE PRESS)
 		//
@@ -467,7 +487,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 				}
 			}
 		}
-		
+		*/
 	}
 	
 	@Override
@@ -534,16 +554,21 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 	private void wannaPlay(){
 	
 		JFrame gameStart = new JFrame(); 
-		gameStart.setBounds(300,400, 400, 400);
+		gameStart.setBounds(300,400, 400, 500);
+		gameStart.setLocationRelativeTo(null);
 		gameStart.setLayout(null);
 		gameStart.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ImageIcon background1 = new ImageIcon("snowBackground.png"); 
 		JLabel background2 = new JLabel(background1); 
 		gameStart.add(background2);
+		background2.setBounds(0, 0, gameStart.getWidth(), gameStart.getHeight());
 		JButton start = new JButton("Play"); 
 		JButton quit = new JButton("Quit"); 
 		gameStart.add(start); 
 		gameStart.add(quit); 
+		start.setBounds(gameStart.getWidth()/2-35,gameStart.getHeight()/2+100,70,30);
+		quit.setBounds(gameStart.getWidth()/2-35,gameStart.getHeight()/2+135,70,30);
+		gameStart.getContentPane().repaint();
 		gameStart.setVisible(true);
 		start.addActionListener(new ActionListener() 
 		{
