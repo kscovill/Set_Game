@@ -182,7 +182,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 	}
 	public void restart(){
 		
-		jingle.SetMusic("jinglePiano.wav");
+		jingle.SetMusic("merryChristmas.wav");
 		jingle.playSound(LOOP);
 		gameJFrame.setVisible(true);
 		
