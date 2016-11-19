@@ -1,3 +1,4 @@
+import java.awt.Button;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
@@ -73,7 +74,10 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
     protected JPanel panel = new JPanel();
     protected JLayeredPane gamePanel = new JLayeredPane();
     protected JButton pauseButton;
-    protected Sound santa = new Sound();
+    protected Sound santa;
+    protected Sound bells = new Sound(); 
+    protected Sound jingle = new Sound(); 
+    protected JButton quit;
         
 	public Controller(String passedInWindowTitle, 
 	        int gameWindowX, int gameWindowY, int gameWindowWidth, int gameWindowHeight){
@@ -97,8 +101,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
         panel.setBackground(Color.GRAY);
         background.setSize(gamePanel.getWidth(), 1150);
         gamePanel.add(background); 
-        
-        santa.SetMusic("santaLaugh.wav");
+       
         
         gamePanel.setVisible(true);
         panel.setVisible(true);
@@ -128,29 +131,32 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 				pauseTimer = 15;
 				
 			}});
-        pauseButton.setBounds(50,100,280,40);
+        pauseButton.setBounds(50,panel.getHeight()/7*2,panel.getWidth()-100,40);
         pauseButton.setVisible(true);
         panel.setLayout(null);
         playerName = new JLabel("", SwingConstants.CENTER);
         panel.add(playerName);
-        playerName.setFont(new Font("Serif", Font.PLAIN, 21));
-        playerName.setBounds(50, 75, 280, 25);
+        quit = new JButton("QUIT");
+        quit.setBounds(50,panel.getHeight()/7*6,panel.getWidth()-100,40);
+        playerName.setFont(new Font("Serif", Font.BOLD, 45));
+        playerName.setBounds(50, panel.getHeight()/7*0+50, panel.getWidth()-100, 60);
         playerName.setVisible(true);
         scoreKeeper = new JLabel(Integer.toString(playerScore), SwingConstants.CENTER);
         numsets = new JLabel("", SwingConstants.CENTER);
         info = new JLabel("", SwingConstants.CENTER);
+        panel.add(quit);
         panel.add(scoreKeeper);
         panel.add(numsets);
         panel.add(info);
         scoreKeeper.setFont(new Font("Serif", Font.PLAIN, 65));
-        scoreKeeper.setBounds(0,panel.getHeight()/2,panel.getWidth(),70);
+        scoreKeeper.setBounds(0,panel.getHeight()/7*1,panel.getWidth(),100);
         scoreKeeper.setVisible(true);
         numsets.setFont(new Font("Serif", Font.PLAIN, 30));
-        numsets.setBounds(0, panel.getHeight()/4*3, panel.getWidth(), 45);
+        numsets.setBounds(0, panel.getHeight()/7*5, panel.getWidth(), 45);
         numsets.setVisible(true);
-        info.setText("That was not a Set!");
+        info.setText("Have Fun");
         info.setFont(new Font("Serif", Font.PLAIN, 30));
-        info.setBounds(0, panel.getHeight()/4, panel.getWidth(), 45);
+        info.setBounds(0, panel.getHeight()/7*3, panel.getWidth(), 45);
         info.setVisible(true);
         
         
@@ -176,11 +182,13 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 	}
 	public void restart(){
 		
+		jingle.SetMusic("jinglePiano.wav");
+		jingle.playSound(LOOP);
 		gameJFrame.setVisible(true);
 		
 		gameDeck = new Deck(gameJFrame,gamePanel,MAX_DECKS);
 		playerScore =0;
-		scoreKeeper.setText(Integer.toString(playerScore));
+		scoreKeeper.setText("Score: " + Integer.toString(playerScore));
 		playerName.setText("Player 1");
 		CHEAT = false;
 		
@@ -196,8 +204,11 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 			
 		}*/
 		
-		String player = new String();
-		player = JOptionPane.showInputDialog("Please enter your name: ");
+		String player;
+		player = JOptionPane.showInputDialog(null, "Enter name :  ");
+		if ((player == null)) {
+			System.exit(1);
+		}
 		
 		playerName.setText(player);
 		if(player.equals("cheat")){
@@ -235,6 +246,11 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 				}
 			}
 		}
+		if(sets == 1){
+			numsets.setText("There is " + sets + " set on the table!");
+		}else{
+			numsets.setText("There are " + sets + " sets on the table!");
+		}
 		//System.out.println("There is/are " + sets + " set(s) on the table.");
 		if(sets ==0 || playable.size() < MIN_CARDS){
 			//System.out.println("The size of the gameDeck is " + gameDeck.list.size());
@@ -248,11 +264,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		}
 		
 		drawCards(playable);
-		if(sets == 1){
-			numsets.setText("There is " + sets + " set on the table!");
-		}else{
-			numsets.setText("There are " + sets + " sets on the table!");
-		}
+		
 	}
 	public void drawCards(ArrayList<Card> play){
 		//System.out.print("BEFORE DRAWING, THERE ARE : " + play.size() + "IN THE ARRAY");
@@ -416,6 +428,8 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 					{
 						try 
 						{
+							santa = new Sound();
+						    santa.SetMusic("santaLaugh.wav");
 							santa.playSound(NO_LOOP);
 						} 
 						catch (Exception e) 
@@ -437,7 +451,6 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 						
 						numHighlighted =0;
 						pauseTimer = 0;
-						
 						playerScore++;
 						scoreKeeper.setText("Score: " + Integer.toString(playerScore));
 						makeDeck();
@@ -526,6 +539,8 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 	
 	private void wannaPlay(){
 	
+        bells.SetMusic("bells.wav");
+        bells.playSound(LOOP);
 		JFrame gameStart = new JFrame(); 
 		gameStart.setBounds(1000,700, 1000, 678);
 		gameStart.setLocationRelativeTo(null);
@@ -550,6 +565,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 			@Override
 			public void actionPerformed(ActionEvent arg0) 
 			{
+				bells.stopSound();
 				gameReady = true;
 				gameStart.setVisible(false);
 			    restart();
