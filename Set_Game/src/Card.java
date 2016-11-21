@@ -146,6 +146,9 @@ class Card {
     protected String getOrn(){
     	return ornamentName[Ornament];
     }
+    protected int getSizeint(){
+    	return Tree;
+    }
     protected String getSize(){
     switch(Tree){
 	case 0:
