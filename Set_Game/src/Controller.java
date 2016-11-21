@@ -81,6 +81,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
     protected JButton quit;
 	JFrame gameStart = new JFrame();
 	JFrame gameMenu = new JFrame(); 
+
 	
 	public Controller(String passedInWindowTitle, 
 	        int gameWindowX, int gameWindowY, int gameWindowWidth, int gameWindowHeight){
@@ -626,7 +627,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 			public void actionPerformed(ActionEvent arg0) 
 			{
 				gameStart.setVisible(false);
-				LearnYa();
+				LearnYa(0);
 			}	  
 	    });
 		quit.addActionListener(new ActionListener() 
@@ -638,28 +639,43 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 			}	  
 	    });
 	}
-
-	private void LearnYa(){
-		gameMenu.setBounds(1000,700, 1000, 678);
+	
+	ImageIcon background1 = new ImageIcon("instruction1.jpg"); 
+	JLabel background2 = new JLabel(background1); 
+	ImageIcon background3 = new ImageIcon("instruction2.jpg"); 
+	JLabel background4 = new JLabel(background3); 
+	int Instructcount = 0;
+	
+	private void LearnYa(int starter){
+		gameMenu.setBounds(1000,700, 1017, 590);
 		gameMenu.setLocationRelativeTo(null);
+		gameMenu.setTitle("Instructions");
 		gameMenu.setLayout(null);
 		gameMenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		ImageIcon background1 = new ImageIcon("background.png"); 
-		JLabel background2 = new JLabel(background1); 
 		
-		background2.setBounds(0, 0, gameStart.getWidth(), gameStart.getHeight());
-		JButton start = new JButton("Play"); 
+
+		background2.setBounds(0, -60, gameStart.getWidth(), gameStart.getHeight());
+		background4.setBounds(0, -60, gameStart.getWidth(), gameStart.getHeight());
+		JButton start = new JButton("Next ====>"); 
 		JButton quit = new JButton("Quit"); 
 		JButton menu = new JButton("Menu");
 		gameMenu.add(menu);
 		gameMenu.getContentPane().add(start); 
 		gameMenu.getContentPane().add(quit); 
 		gameMenu.add(background2);
-		start.setBounds(gameMenu.getWidth()/2-70,gameMenu.getHeight()/2+150,150,30);
-		quit.setBounds(gameMenu.getWidth()/2-70,gameMenu.getHeight()/2+230,150,30);
-		menu.setBounds(gameMenu.getWidth()/2-70,gameMenu.getHeight()/2+190,150,30);
+		gameMenu.add(background4);
+		start.setBounds(gameMenu.getWidth()/2+90,gameMenu.getHeight()/2+212,150,30);
+		quit.setBounds(gameMenu.getWidth()/2-70,gameMenu.getHeight()/2+212,150,30);
+		menu.setBounds(gameMenu.getWidth()/2-230,gameMenu.getHeight()/2+212,150,30);
 		quit.setVisible(true);
 		start.setVisible(true);
+		
+		if(starter == 0){
+			background2.setVisible(true);
+			background4.setVisible(false);
+			Instructcount= 0;
+			
+		}
 		
 		gameMenu.setVisible(true);
 		gameMenu.getContentPane().repaint();
@@ -668,10 +684,22 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 			@Override
 			public void actionPerformed(ActionEvent arg0) 
 			{
-				bells.stopSound();
-				gameReady = true;
-				gameMenu.setVisible(false);
-			    restart();
+				if(Instructcount == 0){
+					background2.setVisible(false);
+					background4.setVisible(true);
+					Instructcount++;
+					start.setText("Menu");
+					menu.setText("<==== Previous");
+				}
+				else if(Instructcount == 1){
+					gameMenu.setVisible(false);
+					bells.stopSound();
+					start.setText("Next  ====>");
+					menu.setText("Menu");
+					wannaPlay();
+					
+				}
+				
 			}	  
 	    });
 		menu.addActionListener(new ActionListener() 
@@ -679,9 +707,21 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 			@Override
 			public void actionPerformed(ActionEvent arg0) 
 			{
-				gameMenu.setVisible(false);
-				bells.stopSound();
-				wannaPlay();
+				if(Instructcount == 0){
+					gameMenu.setVisible(false);
+					bells.stopSound();
+					start.setText("Next  ====>");
+					menu.setText("Menu");
+					wannaPlay();
+					
+				}
+				else if(Instructcount == 1){
+					background2.setVisible(true);
+					background4.setVisible(false);
+					Instructcount--;
+					start.setText("Next  ====>");
+					menu.setText("Menu");
+				}
 			}	  
 	    });
 		quit.addActionListener(new ActionListener() 
@@ -692,5 +732,6 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 				System.exit(1);
 			}	  
 	    });
+		
 	}
 }
