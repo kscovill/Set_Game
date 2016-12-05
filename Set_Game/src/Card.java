@@ -15,14 +15,19 @@ import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon; // for ImageIcon
 import javax.swing.JButton;
+///////////////////////////////////////
+///////////////////////////////////////
+///////// Set Game Card Class /////////
+///////////////////////////////////////
+///////////////////////////////////////
 
+// This class if for each individual card. 
 
 class Card {
     protected JFrame cardJFrame;
     protected JLabel label[] = new JLabel[3]; // the container for the Image (of a bug)
     protected Card card[] = new Card[81];
     JButton button = new JButton();
-    
     protected String fatColorName[] = new String[3];
     protected String mediumColorName[] = new String[3];
     protected String skinnyColorName[] = new String[3];
@@ -38,6 +43,8 @@ class Card {
     protected int div = 3;
     protected Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     
+    // Constructor 
+    // Knows all the possible combinations and makes specific cards on given parameters.
     public Card(JFrame myJFrame, JLayeredPane panel, int cardNumber, int directionChangeProbability, int tree, int orn, int top, int color){
     	
     	Colors = color;
@@ -45,8 +52,6 @@ class Card {
     	Tree = tree;
     	Ornament = orn;
 
-  	   //System.out.println(screenSize.getHeight() + " is the height in pixels");
-  	   //System.out.println(screenSize.getWidth() + " is the width in pixels");
     	
     	fatColorName[0] = "fatBlue.png";
         fatColorName[1] = "fatRed.png";
@@ -127,6 +132,9 @@ class Card {
 	    
      
     }
+    
+    // Changes the highlight of the card for when selected
+    
     public void changeHighlight(){
     	if (highlight == false){
     		highlight = true;
@@ -138,46 +146,50 @@ class Card {
     			
     }
     
-    protected void drawCard(){   
-    }
+    // returns the topper variation
     protected String getTop(){
     	return topperName[Topper];
     }
+    //returns the Ornament variation
     protected String getOrn(){
     	return ornamentName[Ornament];
     }
+    
+    // returns the Size variation
     protected int getSizeint(){
     	return Tree;
     }
+    
     protected String getSize(){
-    switch(Tree){
-	case 0:
-		return fatColorName[Colors];
-		
-	case 1:
-		return skinnyColorName[Colors];
-		
-	case 2:
-		return mediumColorName[Colors];
-    default:
-    	return "";
-	}
-    	
+	    switch(Tree){
+		case 0:
+			return fatColorName[Colors];
+			
+		case 1:
+			return skinnyColorName[Colors];
+			
+		case 2:
+			return mediumColorName[Colors];
+	    default:
+	    	return "";
+		}
     }
+    
+    // Return the Color Variation
     protected int getColors(){
     	return Colors;
     }
     
-    
+    // returns if the card is highlighted
     public boolean isHighlight(){
     	return highlight;
     }
     
-  
-   
+    // returns the height of the card
     public int getHeight(){
     	return icon[0].getIconHeight();
     }
+    // returns the width of the card.
     public int getWidth(){
     	return icon[0].getIconWidth();
     }

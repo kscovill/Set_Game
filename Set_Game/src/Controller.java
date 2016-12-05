@@ -34,6 +34,7 @@ import javax.swing.SwingConstants;
 ///////// Set Game Controller /////////
 ///////////////////////////////////////
 ///////////////////////////////////////
+
 public class Controller extends TimerTask implements MouseListener, ActionListener{
 	public Deck gameDeck;
     public JFrame gameJFrame;
@@ -59,6 +60,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
     private final int MIN_CARDS = 12;
     private final int MAX_DECKS = 1;
     private boolean CHEAT = false;
+    // Max goal is 27
     private final int GOAL = 4;
     private int div;
     protected static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -66,7 +68,7 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
     protected double h;
     private static boolean LOOP = true;
     private static boolean NO_LOOP = false;
-    JLabel background;
+    private JLabel background;
     protected String fatColorName[] = new String[3];
     protected String mediumColorName[] = new String[3];
     protected String skinnyColorName[] = new String[3];
@@ -79,8 +81,9 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
     protected Sound bells = new Sound(); 
     protected Sound jingle = new Sound(); 
     protected JButton quit;
-	JFrame gameStart = new JFrame();
-	JFrame gameMenu = new JFrame(); 
+	private JFrame gameStart = new JFrame();
+	private JFrame gameMenu = new JFrame(); 
+	private boolean setDone = false;
 
 	
 	public Controller(String passedInWindowTitle, 
@@ -92,6 +95,8 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
         gameJFrame.setLocation(gameWindowX, gameWindowY);
         gameJFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
+        //Check the size of computer screen to adjust size accordingly
+        
         if(screenSize.getWidth() < 1800){
         	background = new JLabel(new ImageIcon("winterGround1.png"));
 
@@ -100,6 +105,8 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
         	background = new JLabel(new ImageIcon("winterGround.png"));
         }
         
+        
+        // Initialize JFrame of main game
         panel.setBounds(0, 0, 380, gameWindowHeight);
         gamePanel.setBounds(380, 0, gameWindowWidth - 380, gameWindowHeight);
         panel.setBackground(Color.GRAY);
@@ -128,8 +135,11 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
         
         pauseButton = new JButton("PAUSE CARDS (15 Seconds)");
         panel.add(pauseButton);
+        
+        // Pause Button
+        
         pauseButton.addActionListener(new ActionListener(){
-
+        	
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				pauseTimer = 15;
@@ -144,6 +154,10 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
         panel.setLayout(null);
         playerName = new JLabel("", SwingConstants.CENTER);
         panel.add(playerName);
+        
+        
+        // Quit Button
+        
         quit = new JButton("QUIT");
         quit.setBounds(50,panel.getHeight()/7*6,panel.getWidth()-100,40);
         quit.addActionListener(new ActionListener(){
@@ -181,13 +195,12 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 
         gameJFrame.setVisible(false);
         
-        
+        // BEGIN
         wannaPlay();
-  
-        //drawCards(playable);
         
 	}
 	public static void main( String args[]){
+		// Checks screen Size to adjust game size accordingly
 		if(screenSize.getWidth()<1800){				
 			Controller myController = new Controller("Advanced Set", 20,0, /*(int)screenSize.getWidth()*/1280 - 40, /*(int)screenSize.getHeight()*/800 - 120);// window title, int gameWindowX, int gameWindowY, int gameWindowWidth, int gameWindowHeight){
 		}else{
@@ -196,6 +209,8 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		}
 	}
 	public void restart(){
+		
+		// Resets all variables to begin a new game/ start the game
 		
 		jingle.stopSound();
 		jingle.SetMusic("merryChristmas.wav");
@@ -208,25 +223,20 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		playerName.setText("Player 1");
 		CHEAT = false;
 		
-		
-		/*while(!gameReady){
-			int dialogResult = JOptionPane.showConfirmDialog(null, "Are you ready?");
-			if(dialogResult == JOptionPane.YES_OPTION){
-				gameReady = true;
-				break;
-			}if(dialogResult == JOptionPane.CANCEL_OPTION || dialogResult == JOptionPane.NO_OPTION){
-				System.exit(1);
-			}
-			
-		}*/
+		// Gets the Users Name
 		
 		String player;
 		player = JOptionPane.showInputDialog(null, "Enter name :  ");
 		if ((player == null)) {
 			System.exit(1);
 		}
+		if(player.length()<1){
+			playerName.setText("Kris Kringle");
+		}else{			
+			playerName.setText(player);
+		}
+		// Checks to see if the user would like to cheat
 		
-		playerName.setText(player);
 		if(player.equals("cheat")){
 			CHEAT = true;
 		}
@@ -237,7 +247,11 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		
 		
 	}
+	
+	//Make the deck of cards 
 	public void makeDeck(){
+		
+		// Are there cards on the deck? if not add some.
 		if(playable.isEmpty() && !gameDeck.list.isEmpty()){
 			for (int j =0; j < MIN_CARDS; j++){
 	        	playable.add(gameDeck.list.get(0));
@@ -245,12 +259,14 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 	        	
 	        }
 		}
+		
 		for(int i =0; i < playable.size();i++){
 			playable.get(i).button.setBorder(null);
 		}
+
+
+		// Check all the cards on the table if there is a set
 		
-		//System.out.println(playable.size() + " on the field");
-		//System.out.println(gameDeck.list.size() + " Cards left in Deck");
 		int sets = 0;
 		int size = playable.size();
 		for (int i =0; i < size;i++){
@@ -262,14 +278,17 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 				}
 			}
 		}
+		
+		// Tell How many sets there are
+		
 		if(sets == 1){
 			numsets.setText("There is " + sets + " set on the table!");
 		}else{
 			numsets.setText("There are " + sets + " sets on the table!");
 		}
-		//System.out.println("There is/are " + sets + " set(s) on the table.");
+
+		// Make Sure there is atleast 12 cards or if there needs to be more.
 		if(sets ==0 || playable.size() < MIN_CARDS){
-			//System.out.println("The size of the gameDeck is " + gameDeck.list.size());
 			if(!gameDeck.list.isEmpty()){
 				for(int h = 0; h < 3; h++){
 					playable.add(gameDeck.list.get(0));
@@ -282,9 +301,10 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		drawCards(playable);
 		
 	}
+	
+	// Display the cards on the table
+	
 	public void drawCards(ArrayList<Card> play){
-		//System.out.print("BEFORE DRAWING, THERE ARE : " + play.size() + "IN THE ARRAY");
-		
 		
 		for ( int i =0; i < play.size(); i++){
 			playable.get(i).button.setVisible(false);
@@ -294,115 +314,66 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 				playable.get(i).button.setBounds((20+(int)(i%(play.size()/3))*(int)((double)200)), 40 + ((int)(i/(play.size()/3))*(int)((double)(300))), playable.get(0).getWidth()-20, playable.get(0).getHeight()+50);
 				
 			}
-        	playable.get(i).button.setVisible(true);
-        	/*System.out.println(play.get(i));
-        	System.out.println(play.get(i).getOrn());
-        	System.out.println(play.get(i).getTop());
-        	System.out.println(play.get(i).getColors());
-        	System.out.println(play.get(i).getSize());*/
+        	playable.get(i).button.setVisible(true);       
         }
 
 		gamePanel.setComponentZOrder(background,gamePanel.getComponentCount()-1);
-		gamePanel.repaint();
 		gameJFrame.getContentPane().repaint();
 		
 	}
+	
+	// Hide the cards on the table
 	public void eraseCards(ArrayList<Card> play){
 		for ( int i =0; i < play.size(); i++){
         	play.get(0).button.setVisible(false);
         	
         }
 	}
+	
+	// Hide a specific card
 	public void eraseCard(int cardnum){
 		playable.get(cardnum).button.setVisible(false);
 	}
+	
+	// Randomize the cards on the table to change position
 	public void randomize(ArrayList<Card> play){
 		Collections.shuffle(play);
 	}
+	
+	// Checks to see whether there is a set or not
 	public int isThereASet(Card a, Card b, Card c){
-		boolean colorAns = false;
-		boolean sizeAns = false;
-		boolean ornAns = false;
-		boolean topAns = false;
 		int sets = 0;
 		
-		/*
-		//check size
-		if(a.getSize().equals(b.getSize()) && b.getSize().equals(c.getSize())){
-			sizeAns = true;
-			System.out.println("ALL SAME SIZE");
-		}else if(!a.getSize().equals(b.getSize())  && !a.getSize().equals(c.getSize()) && !b.getSize().equals(c.getSize())){
-			sizeAns = true;
-			System.out.println("ALL DIFFERENT SIZES");
-			System.out.println(a.getSize());
-			System.out.println(b.getSize());
-			System.out.println(c.getSize());
-			
-		}else{
-			sizeAns = false;
-			System.out.println("SIZES NOT SET");
-		}
-		*/
 		
 		//check Sizes
-		if(a.getSizeint() == b.getSizeint() && b.getSizeint() == c.getSizeint()){
-			sizeAns = true;
-		}else if(a.getSizeint() != b.getSizeint()  && a.getSizeint() != c.getSizeint() && b.getSizeint() != c.getSizeint()){
-			sizeAns = true;
-			
-		}else{
-			sizeAns = false;
-		}
-		
-		//check  ornaments
-		if(a.getOrn().equals(b.getOrn()) && b.getOrn().equals(c.getOrn())){
-			ornAns = true;
-		}else if(!a.getOrn().equals(b.getOrn())  && !a.getOrn().equals(c.getOrn()) && !b.getOrn().equals(c.getOrn())){
-			ornAns = true;
-			
-		}else{
-			ornAns = false;
-		}
-		
-		//check top
-		if(a.getTop().equals(b.getTop()) && b.getTop().equals(c.getTop())){
-			topAns = true;
-		}else if(!a.getTop().equals(b.getTop())  && !a.getTop().equals(c.getTop()) && !b.getTop().equals(c.getTop())){
-			topAns = true;
-			
-		}else{
-			topAns = false;
-		}
-		
-		//check color
-		if(a.getColors() == b.getColors() && b.getColors() == c.getColors()){
-			colorAns = true;
-		}else if(a.getColors() != b.getColors() && a.getColors() != c.getColors() && b.getColors() != c.getColors()){
-			colorAns = true;
-			
-		}else{
-			colorAns = false;
-		}
-		
-		if(colorAns == true && topAns == true && ornAns == true && sizeAns == true){
-			sets++;
-			if(CHEAT){
-				a.button.setBorder(BorderFactory.createLineBorder(Color.CYAN,3));
-				b.button.setBorder(BorderFactory.createLineBorder(Color.CYAN,3));
-				c.button.setBorder(BorderFactory.createLineBorder(Color.CYAN,3));
-				System.out.println("Next Set");
-				System.out.println(a.getColors() + ", " + a.getTop() + ", " + a.getSize() + ", " + a.getOrn());
-				System.out.println(b.getColors() + ", " + b.getTop() + ", " + b.getSize() + ", " + b.getOrn());
-				System.out.println(c.getColors() + ", " + c.getTop() + ", " + c.getSize() + ", " + c.getOrn());
+		if((a.getSizeint() == b.getSizeint() && b.getSizeint() == c.getSizeint()) || (a.getSizeint() != b.getSizeint()  && a.getSizeint() != c.getSizeint() && b.getSizeint() != c.getSizeint())){
+			//check Ornaments
+			if((a.getOrn().equals(b.getOrn()) && b.getOrn().equals(c.getOrn())) || (!a.getOrn().equals(b.getOrn())  && !a.getOrn().equals(c.getOrn()) && !b.getOrn().equals(c.getOrn()))){
+				//check top
+				if((a.getTop().equals(b.getTop()) && b.getTop().equals(c.getTop())) || (!a.getTop().equals(b.getTop())  && !a.getTop().equals(c.getTop()) && !b.getTop().equals(c.getTop()))){
+					//check color
+					if((a.getColors() == b.getColors() && b.getColors() == c.getColors()) || (a.getColors() != b.getColors() && a.getColors() != c.getColors() && b.getColors() != c.getColors())){
+						sets++;
+						if(CHEAT){
+							a.button.setBorder(BorderFactory.createLineBorder(Color.CYAN,3));
+							b.button.setBorder(BorderFactory.createLineBorder(Color.CYAN,3));
+							c.button.setBorder(BorderFactory.createLineBorder(Color.CYAN,3));
+							System.out.println("Next Set");
+							System.out.println(a.getColors() + ", " + a.getTop() + ", " + a.getSize() + ", " + a.getOrn());
+							System.out.println(b.getColors() + ", " + b.getTop() + ", " + b.getSize() + ", " + b.getOrn());
+							System.out.println(c.getColors() + ", " + c.getTop() + ", " + c.getSize() + ", " + c.getOrn());
+						}
+					}		
+				}
 			}
 		}
-		
 		return sets;
 	}
-	public void restartMouseCount(){
-		mouseCount =0;
-	}
+	
+	// Checks to see if the user won by getting the Goal amount of sets
+	
 	public void DidIWin(){
+		
 		if (playerScore == GOAL){
 			for(int j =0; j< playable.size();j++){
 				playable.get(j).button.setVisible(false);
@@ -433,6 +404,8 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 			}
 		}
 	}
+	
+	// Run method for out timer. Has iterations that happen every 1/4 second, 1second, 8 seconds, 25 seconds
 	@Override
 	public void run() {
 		counter++;
@@ -441,7 +414,6 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		//
 		// Every One Second
 		//
-		//System.out.println("Number of time ran: " + counter);
 		if(counter%4 == 0){
 			if(pauseTimer != 0){
 				pauseTimer--;
@@ -452,71 +424,87 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 					info.setText("You ran out of time!");
 					
 				}
-				//System.out.println(pauseTimer);
 			}
 		}
+		
+		// Every 25 seconds if pause was pressed
+		
 		if(!pauseButton.isEnabled()){
 			if(newCounter%100 == 0){
 				pauseButton.setEnabled(true);
 				pauseButton.setText("PAUSE CARDS (15 Seconds)");
 			}
 		}
+		
+		// Checks every 1/4 second if there are 3 cards highlighted
 		for (int i =0; i < playable.size(); i++){
-			if(playable.get(i).isHighlight() == true){
-				numHighlighted++;
-				checkables[numHighlighted-1] = playable.get(i);
-				if(numHighlighted == 3){
-					if(isThereASet(checkables[0],checkables[1],checkables[2])==1)
-					{
-						try 
+			if(setDone == false){
+				if(playable.get(i).isHighlight() == true){
+					
+					numHighlighted++;
+					checkables[numHighlighted-1] = playable.get(i);
+					
+					
+					if(numHighlighted == 3){
+						if(isThereASet(checkables[0],checkables[1],checkables[2])==1)
 						{
-							santa = new Sound();
-						    santa.SetMusic("santaLaugh.wav");
-							santa.playSound(NO_LOOP);
-						} 
-						catch (Exception e) 
-						{
-							e.printStackTrace();
-						}
-						for(int q =0; q < checkables.length; q++){
-							
-							for( int h = 0; h < playable.size();h++){
-								if(playable.get(h).equals(checkables[q])){
-									eraseCard(h);
-									playable.remove(h);
-									break;
+							setDone = true;
+							try 
+							{
+								santa = new Sound();
+							    santa.SetMusic("santaLaugh.wav");
+								santa.playSound(NO_LOOP);
+							} 
+							catch (Exception e) 
+							{
+								e.printStackTrace();
+							}
+							for(int q =0; q < checkables.length; q++){
+								
+								for( int h = 0; h < playable.size();h++){
+									if(playable.get(h).equals(checkables[q])){
+										eraseCard(h);
+										playable.remove(h);
+										break;
+									}
+									
 								}
 								
 							}
+							if(!pauseButton.isEnabled()){
+								pauseButton.setEnabled(true);
+								pauseButton.setText("PAUSE CARDS (15 Seconds)");
+							}
+							numHighlighted =0;
+							pauseTimer = 0;
+							info.setText("That was a Set!");
+							playerScore++;
+							scoreKeeper.setText("Score: " + Integer.toString(playerScore));
+							makeDeck();
 							
 						}
-						if(!pauseButton.isEnabled()){
-							pauseButton.setEnabled(true);
-							pauseButton.setText("PAUSE CARDS (15 Seconds)");
+						else{
+							for(int q =0; q < checkables.length; q++){
+								
+								checkables[q].changeHighlight();
+							}
+							pauseTimer = 0;
+							info.setText("That was not a set!");
 						}
-						numHighlighted =0;
-						pauseTimer = 0;
-						info.setText("That was a Set!");
-						playerScore++;
-						scoreKeeper.setText("Score: " + Integer.toString(playerScore));
-						makeDeck();
-						
-					}
-					else{
-						for(int q =0; q < checkables.length; q++){
-							
-							checkables[q].changeHighlight();
+						for(int w = 0; w < 3; w++){
+							checkables[w] = null;
 						}
-						pauseTimer = 0;
-						//System.out.println("That was not a set!");
-						info.setText("That was not a set!");
 					}
-					for(int w = 0; w < 3; w++){
-						checkables[w] = null;
-					}
+				}			
+			}
+			if(setDone == true){
+				if (playable.get(i).isHighlight()){
+					playable.get(i).changeHighlight();
 				}
-				//System.out.println("Card " + i + " Is highlighted.");
-			}			
+			}
+		}
+		if (setDone == true){
+			setDone = false;
 		}
 		numHighlighted = 0;
 		
@@ -524,33 +512,20 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		// Every 8 Seconds
 		//
 		
-		if(counter%16 == 0 && pauseTimer == 0){
+		if(counter%32 == 0 && pauseTimer == 0){
 			if(!CHEAT){
 				if(!stopRandom){
 					
-						//eraseCards(playable);
 						randomize(playable);
 						drawCards(playable);
 					
 				}
 			}
 		}
-		/*
-		//
-		// Every 20 Seconds (ADD WITHOUT MOUSE PRESS)
-		//
-		if(counter%80 == 0 && pauseTimer == 0){
-			if(!CHEAT){
-				for (int i = 0; i < playable.size();i++){
-					if(playable.get(i).isHighlight() == true){
-						playable.get(i).changeHighlight();
-					}
-				}
-			}
-		}
-		*/
+		
 	}
 	
+	// Generic Methods needed
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -582,12 +557,13 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		
 	}
 	
-	
+	// Method that deals with the intro JFrame
 	private void wannaPlay(){
 	
         bells.SetMusic("bells.wav");
         bells.playSound(LOOP);
 		gameStart.setBounds(1000,700, 1000, 678);
+		gameStart.setResizable(false);
 		gameStart.setLocationRelativeTo(null);
 		gameStart.setLayout(null);
 		gameStart.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -646,9 +622,13 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 	JLabel background4 = new JLabel(background3); 
 	int Instructcount = 0;
 	
+	
+	// Method that deals with the instruction JFrame
+	
 	private void LearnYa(int starter){
 		gameMenu.setBounds(1000,700, 1017, 590);
 		gameMenu.setLocationRelativeTo(null);
+		gameMenu.setResizable(false);
 		gameMenu.setTitle("Instructions");
 		gameMenu.setLayout(null);
 		gameMenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
