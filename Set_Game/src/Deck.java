@@ -16,6 +16,12 @@ import javax.swing.JPanel;
 ///////////////////////////////////////
 ///////////////////////////////////////
 
+
+
+///////////////////////////////////////
+/////////// Class Variables  //////////
+///////////////////////////////////////
+
 public class Deck{
 	    protected JFrame cardJFrame;
 	    protected JLayeredPane panel;
@@ -23,6 +29,12 @@ public class Deck{
 	    protected Card card[] = new Card[81];
 	    protected ArrayList<Card> list;
 	    protected int num_decks;
+	    
+
+///////////////////////////////////////
+///////// makeDeck Method  /////////
+///////////////////////////////////////
+	    
 	    
 	    // Method that makes a deck of 81 different cards based on the parameters given in the card class
 	    protected void makeDeck(){
@@ -48,6 +60,11 @@ public class Deck{
 	    		Collections.shuffle(list);
 	    	}
 	    }
+	    
+
+///////////////////////////////////////
+///////// Constructor Method  /////////
+///////////////////////////////////////
 	    
 	    // Constructor that makes the deck.
 	    public Deck(JFrame passedInJFrame, JLayeredPane panel1, int num_of_decks){

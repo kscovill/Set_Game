@@ -35,6 +35,11 @@ import javax.swing.SwingConstants;
 ///////////////////////////////////////
 ///////////////////////////////////////
 
+
+///////////////////////////////////////
+//////////Class Variables  //////////
+///////////////////////////////////////
+
 public class Controller extends TimerTask implements MouseListener, ActionListener{
 	public Deck gameDeck;
     public JFrame gameJFrame;
@@ -85,6 +90,10 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 	private JFrame gameMenu = new JFrame(); 
 	private boolean setDone = false;
 
+	
+///////////////////////////////////////
+////////////// Controller /////////////
+///////////////////////////////////////
 	
 	public Controller(String passedInWindowTitle, 
 	        int gameWindowX, int gameWindowY, int gameWindowWidth, int gameWindowHeight){
@@ -199,6 +208,12 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
         wannaPlay();
         
 	}
+	
+///////////////////////////////////////
+///////////////// Main ////////////////
+///////////////////////////////////////
+	
+	
 	public static void main( String args[]){
 		// Checks screen Size to adjust game size accordingly
 		if(screenSize.getWidth()<1800){				
@@ -208,6 +223,11 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 			
 		}
 	}
+	
+///////////////////////////////////////
+//////////// Restart Method ///////////
+///////////////////////////////////////
+	
 	public void restart(){
 		
 		// Resets all variables to begin a new game/ start the game
@@ -247,6 +267,10 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		
 		
 	}
+	
+///////////////////////////////////////
+/////////// makeDeck Method ///////////
+///////////////////////////////////////
 	
 	//Make the deck of cards 
 	public void makeDeck(){
@@ -302,8 +326,13 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		
 	}
 	
-	// Display the cards on the table
 	
+///////////////////////////////////////
+/////////// drawCards Method //////////
+///////////////////////////////////////
+	
+	
+	// Display the cards on the table
 	public void drawCards(ArrayList<Card> play){
 		
 		for ( int i =0; i < play.size(); i++){
@@ -322,6 +351,11 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		
 	}
 	
+	
+///////////////////////////////////////
+///////// eraseCards Method ///////////
+///////////////////////////////////////
+	
 	// Hide the cards on the table
 	public void eraseCards(ArrayList<Card> play){
 		for ( int i =0; i < play.size(); i++){
@@ -330,15 +364,30 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
         }
 	}
 	
+	
+///////////////////////////////////////
+/////////// eraseCard Method //////////
+///////////////////////////////////////
+	
 	// Hide a specific card
 	public void eraseCard(int cardnum){
 		playable.get(cardnum).button.setVisible(false);
 	}
 	
+	
+///////////////////////////////////////
+/////////// randomize Method //////////
+///////////////////////////////////////
+	
 	// Randomize the cards on the table to change position
 	public void randomize(ArrayList<Card> play){
 		Collections.shuffle(play);
 	}
+	
+	
+///////////////////////////////////////
+///////// isThereASet Method //////////
+///////////////////////////////////////
 	
 	// Checks to see whether there is a set or not
 	public int isThereASet(Card a, Card b, Card c){
@@ -370,8 +419,12 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		return sets;
 	}
 	
-	// Checks to see if the user won by getting the Goal amount of sets
 	
+///////////////////////////////////////
+/////////// DidIWin Method ////////////
+///////////////////////////////////////
+	
+	// Checks to see if the user won by getting the Goal amount of sets
 	public void DidIWin(){
 		
 		if (playerScore == GOAL){
@@ -404,6 +457,11 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 			}
 		}
 	}
+	
+	
+///////////////////////////////////////
+///////// run Method  (TIMER) /////////
+///////////////////////////////////////
 	
 	// Run method for out timer. Has iterations that happen every 1/4 second, 1second, 8 seconds, 25 seconds
 	@Override
@@ -525,39 +583,11 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 		
 	}
 	
-	// Generic Methods needed
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		mouseCount=0;
-		
-	}
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+///////////////////////////////////////
+/////////// wannaPlay Method //////////
+///////////////////////////////////////
 	
-	// Method that deals with the intro JFrame
+	// Method that deals with the Introduction JFrame
 	private void wannaPlay(){
 	
         bells.SetMusic("bells.wav");
@@ -623,8 +653,11 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 	int Instructcount = 0;
 	
 	
-	// Method that deals with the instruction JFrame
+///////////////////////////////////////
+////// Instruction JFrame Method //////
+///////////////////////////////////////
 	
+	// Method that deals with the instruction JFrame
 	private void LearnYa(int starter){
 		gameMenu.setBounds(1000,700, 1017, 590);
 		gameMenu.setLocationRelativeTo(null);
@@ -714,4 +747,46 @@ public class Controller extends TimerTask implements MouseListener, ActionListen
 	    });
 		
 	}
+	
+	
+///////////////////////////////////////
+/////////// Generic Method ////////////
+///////////////////////////////////////
+
+	// Generic Method needed
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

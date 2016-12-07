@@ -15,14 +15,20 @@ import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon; // for ImageIcon
 import javax.swing.JButton;
+
+
 ///////////////////////////////////////
 ///////////////////////////////////////
 ///////// Set Game Card Class /////////
 ///////////////////////////////////////
 ///////////////////////////////////////
 
-// This class if for each individual card. 
 
+///////////////////////////////////////
+//////////Class Variables  //////////
+///////////////////////////////////////
+
+// This class if for each individual card. 
 class Card {
     protected JFrame cardJFrame;
     protected JLabel label[] = new JLabel[3]; // the container for the Image (of a bug)
@@ -134,7 +140,6 @@ class Card {
     }
     
     // Changes the highlight of the card for when selected
-    
     public void changeHighlight(){
     	if (highlight == false){
     		highlight = true;
@@ -145,6 +150,11 @@ class Card {
     	}
     			
     }
+    
+
+///////////////////////////////////////
+////////// Return Methods // //////////
+///////////////////////////////////////
     
     // returns the topper variation
     protected String getTop(){
@@ -184,6 +194,11 @@ class Card {
     public boolean isHighlight(){
     	return highlight;
     }
+    
+
+///////////////////////////////////////
+//////////// Get Methods  /////////////
+///////////////////////////////////////
     
     // returns the height of the card
     public int getHeight(){
